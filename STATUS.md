@@ -1,6 +1,6 @@
 # EffectForge Status
 
-Last updated: Phase 4 complete
+Last updated: Phase 5 complete
 
 ## What currently works
 
@@ -10,7 +10,7 @@ Last updated: Phase 4 complete
 - **@effectforge/core** — Project creation, validation, migration framework, diagnostics, deterministic PRNG (Mulberry32)
 - **@effectforge/renderer** — Renderer interface contract
 - **@effectforge/renderer-three** — Three.js WebGL2 renderer with lifecycle, fixed-timestep clock, capture, stats, instanced particle billboards
-- **@effectforge/particles** — SoA particle store, pooled spawning, point/box/circle emitters, gravity/drag behaviors
+- **@effectforge/particles** — SoA particle store, emitters, behaviors, bursts, curve/gradient value sources, size/opacity over lifetime
 - **@effectforge/commands** — Command engine with Zod validation, executor, Immer patch history, undo/redo, transactions
 - **@effectforge/web** — Next.js 16 landing page, docs placeholder, editor placeholder route
 - **@effectforge/cli** — `inspect`, `create`, `validate` commands
@@ -24,7 +24,6 @@ Last updated: Phase 4 complete
 
 ## What is not implemented
 
-- Particle authoring curves/gradients (Phase 5)
 - Pointer interaction (Phase 6)
 - Editor UI (Phase 7)
 - Project persistence / `.effectforge` archives (Phase 8)
@@ -32,7 +31,7 @@ Last updated: Phase 4 complete
 
 ## What is being worked on next
 
-**Phase 5: Particle Authoring Model** — Emission curves, gradients, size/color/opacity over lifetime
+**Phase 6: Pointer Interaction** — Normalized pointer service, attract/repel, first presets
 
 ## Known regressions
 

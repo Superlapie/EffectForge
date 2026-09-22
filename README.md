@@ -6,7 +6,7 @@ Visual authoring and compilation environment for creating production-ready inter
 
 ## Status
 
-Early development. Phases 0–4 are complete (monorepo bootstrap, schema/core, command engine, renderer foundation, particle engine core). See [STATUS.md](./STATUS.md) for current capabilities.
+Early development. Phases 0–5 are complete (monorepo bootstrap, schema/core, command engine, renderer, particle engine + authoring model). See [STATUS.md](./STATUS.md) for current capabilities.
 
 ## Development
 

@@ -14,7 +14,7 @@ The EffectForge particle engine is implemented independently — not based on th
 
 | Package | Responsibility |
 |---------|----------------|
-| `@effectforge/particles` | SoA store, emitters, behaviors, `ParticleSystem` simulation |
+| `@effectforge/particles` | SoA store, emitters, behaviors, bursts, curves, gradients, `ParticleSystem` |
 | `@effectforge/renderer-three` | `ParticleInstancedMesh`, `ParticleScene` GPU sync |
 
 ## Phase 4 (implemented)
@@ -22,11 +22,16 @@ The EffectForge particle engine is implemented independently — not based on th
 - `ParticleStore` — pooled SoA buffers with free list
 - Emitters — `point`, `box`, `circle`
 - Behaviors — `gravity`, `drag`, `constant-acceleration`
-- Value sources — constant and random-range numerics; constant colors
 - `ParticleInstancedMesh` — GPU instanced billboards in Three.js
+
+## Phase 5 (implemented)
+
+- **Bursts** — Timed burst emission with cycles, interval, and probability
+- **Value sources** — `curve`, `random-curve-range`, `gradient`, `random-gradient-range`
+- **Lifetime curves** — `sizeOverLifetime`, `opacityOverLifetime` via `evaluateParameterCurve`
+- **Prewarm** — Optional emitter pre-simulation on first step
 - Benchmark — `pnpm bench:particles`
 
 ## Upcoming
 
-- **Phase 5** — Curves, gradients, bursts, lifetime curves
 - **Phase 6** — Pointer interaction and first presets

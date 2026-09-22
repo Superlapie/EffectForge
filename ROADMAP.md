@@ -55,9 +55,9 @@ Features are marked complete only when implementation works, tests exist, and in
 
 ## Phase 5: Particle Authoring Model
 
-- [ ] Emission rate, bursts, curves, gradients
-- [ ] Size/color/opacity over lifetime
-- [ ] Tests
+- [x] Emission rate, bursts, curves, gradients
+- [x] Size/color/opacity over lifetime
+- [x] Tests
 
 ## Phase 6: Pointer Interaction
 

@@ -6,6 +6,8 @@ export class ParticleStore {
   readonly age: Float32Array;
   readonly lifetime: Float32Array;
   readonly size: Float32Array;
+  readonly baseSize: Float32Array;
+  readonly baseOpacity: Float32Array;
   readonly color: Float32Array;
   readonly alive: Uint8Array;
 
@@ -23,6 +25,8 @@ export class ParticleStore {
     this.age = new Float32Array(capacity);
     this.lifetime = new Float32Array(capacity);
     this.size = new Float32Array(capacity);
+    this.baseSize = new Float32Array(capacity);
+    this.baseOpacity = new Float32Array(capacity);
     this.color = new Float32Array(capacity * 4);
     this.alive = new Uint8Array(capacity);
 

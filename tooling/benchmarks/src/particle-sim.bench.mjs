@@ -22,7 +22,9 @@ function fillStore(system) {
     system.store.velocity[p + 2] = 0;
     system.store.age[index] = 0;
     system.store.lifetime[index] = 60;
+    system.store.baseSize[index] = 0.02;
     system.store.size[index] = 0.02;
+    system.store.baseOpacity[index] = 1;
     const c = system.store.colorOffset(index);
     system.store.color[c] = 1;
     system.store.color[c + 1] = 1;
@@ -53,7 +55,7 @@ function runBenchmark() {
   const msPerFrame = elapsed / FRAMES;
 
   console.log("EffectForge particle simulation benchmark");
-  console.log(`  particles: ${system.activeCount}`);
+  console.log(`  particles: ${filledCount}`);
   console.log(`  frames:    ${FRAMES}`);
   console.log(`  total:     ${elapsed.toFixed(2)} ms`);
   console.log(`  per frame: ${msPerFrame.toFixed(3)} ms`);
