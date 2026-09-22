@@ -66,6 +66,30 @@ export class ParticleScene {
     }
   }
 
+  /**
+   * Update layer configs in place when layer IDs are unchanged.
+   * Returns false when a full scene rebuild is required.
+   */
+  syncProjectLayers(project: EffectForgeProject): boolean {
+    const layers = project.layers.filter((layer) => layer.kind === "particles" && layer.enabled);
+    const currentIds = this.runtimes.map((runtime) => runtime.layer.id).join(",");
+    const nextIds = layers.map((layer) => layer.id).join(",");
+    if (currentIds !== nextIds) {
+      return false;
+    }
+
+    for (const runtime of this.runtimes) {
+      const layer = layers.find((entry) => entry.id === runtime.layer.id);
+      if (!layer || layer.kind !== "particles") {
+        return false;
+      }
+      runtime.layer = layer;
+      runtime.system.updateLayer(layer);
+    }
+
+    return true;
+  }
+
   dispose(scene: Scene): void {
     for (const runtime of this.runtimes) {
       scene.remove(runtime.mesh.mesh);

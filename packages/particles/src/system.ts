@@ -25,13 +25,17 @@ const DEFAULT_CLICK_BURST_COUNT = 16;
  * Phase 6: pointer attract/repel and click bursts.
  */
 export class ParticleSystem {
-  readonly layer: ParticleLayer;
+  private layerState: ParticleLayer;
   readonly store: ParticleStore;
 
   private readonly spawnStream: RandomStream;
   private readonly burstStream: RandomStream;
   private readonly clickBurstCount: number;
-  private readonly pointerInteractive: boolean;
+  private pointerInteractive: boolean;
+
+  get layer(): ParticleLayer {
+    return this.layerState;
+  }
   private emissionAccumulator = 0;
   private elapsed = 0;
   private previousElapsed = 0;
@@ -39,7 +43,7 @@ export class ParticleSystem {
   private prewarmed = false;
 
   constructor(options: ParticleSystemOptions) {
-    this.layer = options.layer;
+    this.layerState = options.layer;
     this.store = new ParticleStore(options.layer.emitter.maxParticles);
     this.spawnStream = deriveStream(options.projectSeed, `particles:${options.layer.id}:spawn`);
     this.burstStream = deriveStream(options.projectSeed, `particles:${options.layer.id}:burst`);
@@ -53,6 +57,11 @@ export class ParticleSystem {
 
   get elapsedTime(): number {
     return this.elapsed;
+  }
+
+  updateLayer(layer: ParticleLayer): void {
+    this.layerState = layer;
+    this.pointerInteractive = layerSupportsPointerInteraction(layer.behaviors);
   }
 
   reset(): void {

@@ -29,13 +29,13 @@ describe("EditorController", () => {
 
   it("adds and removes layers while keeping selection valid", () => {
     const controller = createEditorController(createProject());
-    const beforeRevision = controller.getState().revision;
+    const beforeRevision = controller.getState().projectRevision;
 
     controller.addParticleLayer();
     const added = controller.getState();
     expect(added.project.layers).toHaveLength(1);
     expect(added.selectedLayerId).toBe(added.project.layers[0]?.id);
-    expect(added.revision).toBeGreaterThan(beforeRevision);
+    expect(added.projectRevision).toBeGreaterThan(beforeRevision);
 
     const layerId = added.selectedLayerId!;
     controller.removeLayer(layerId);
@@ -45,12 +45,15 @@ describe("EditorController", () => {
 
   it("tracks playback state independently from project commands", () => {
     const controller = createEditorController(createProject());
+    const initialRevision = controller.getState().projectRevision;
 
     controller.togglePlayback();
     expect(controller.getState().playback.playing).toBe(false);
+    expect(controller.getState().projectRevision).toBe(initialRevision);
 
     controller.setCurrentTime(2.5);
     expect(controller.getState().playback.currentTime).toBe(2.5);
+    expect(controller.getState().projectRevision).toBe(initialRevision);
   });
 
   it("reloads project and resets playback", () => {

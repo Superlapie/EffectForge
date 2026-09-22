@@ -140,6 +140,21 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     this.resize(project.canvas.width, project.canvas.height, this.dpr);
   }
 
+  /** Apply project edits without resetting simulation when layer structure is unchanged. */
+  async updateProject(project: EffectForgeProject): Promise<void> {
+    this.assertInitialized();
+    this.project = project;
+    applyCanvasBackground(this.scene!, project.canvas.background);
+
+    if (this.particleScene?.syncProjectLayers(project)) {
+      return;
+    }
+
+    this.clearParticleScene();
+    this.particleScene = new ParticleScene(project, this.scene!, this.pointer);
+    this.setTestQuadVisible(this.particleScene.layerCount === 0);
+  }
+
   resize(width: number, height: number, dpr: number): void {
     this.assertInitialized();
     this.width = Math.max(1, width);

@@ -23,4 +23,27 @@ describe("ParticleScene", () => {
     particleScene.dispose(scene);
     expect(scene.children.length).toBe(0);
   });
+
+  it("syncs layer edits in place without rebuilding runtimes", () => {
+    const layer = createDefaultParticleLayer("Sparks");
+    layer.emitter.rate = 120;
+    const project = createProject({ layers: [layer] });
+    const scene = new Scene();
+    const particleScene = new ParticleScene(project, scene, null);
+
+    for (let i = 0; i < 10; i++) {
+      particleScene.simulate(1 / 60);
+    }
+    const before = particleScene.totalActiveParticles;
+    expect(before).toBeGreaterThan(0);
+
+    const updated = {
+      ...project,
+      layers: [{ ...layer, opacity: 0.25, emitter: { ...layer.emitter, rate: 200 } }],
+    };
+    expect(particleScene.syncProjectLayers(updated)).toBe(true);
+    expect(particleScene.totalActiveParticles).toBe(before);
+
+    particleScene.dispose(scene);
+  });
 });

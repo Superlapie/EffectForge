@@ -7,7 +7,7 @@ export class EditorController {
   private session: CommandSession;
   private selectedLayerId: string | null;
   private playback: EditorPlaybackState = { playing: true, currentTime: 0 };
-  private revision = 0;
+  private projectRevision = 0;
   private readonly listeners = new Set<() => void>();
 
   constructor(project: EffectForgeProject) {
@@ -27,14 +27,14 @@ export class EditorController {
       playback: { ...this.playback },
       canUndo: this.session.canUndo(),
       canRedo: this.session.canRedo(),
-      revision: this.revision,
+      projectRevision: this.projectRevision,
     };
   }
 
   selectLayer(layerId: string | null): void {
     if (layerId === null || this.session.getProject().layers.some((layer) => layer.id === layerId)) {
       this.selectedLayerId = layerId;
-      this.notify();
+      this.emit();
     }
   }
 
@@ -91,7 +91,7 @@ export class EditorController {
     const layer = createDefaultParticleLayer(`Layer ${this.session.getProject().layers.length + 1}`);
     this.execute({ type: "AddLayer", payload: { layer } });
     this.selectedLayerId = layer.id;
-    this.notify();
+    this.emit();
   }
 
   duplicateLayer(layerId: string): void {
@@ -100,7 +100,7 @@ export class EditorController {
     const created = this.session.getProject().layers.find((layer) => !beforeIds.has(layer.id));
     if (created) {
       this.selectedLayerId = created.id;
-      this.notify();
+      this.emit();
     }
   }
 
@@ -108,7 +108,7 @@ export class EditorController {
     this.execute({ type: "RemoveLayer", payload: { layerId } });
     if (this.selectedLayerId === layerId) {
       this.selectedLayerId = this.session.getProject().layers[0]?.id ?? null;
-      this.notify();
+      this.emit();
     }
   }
 
@@ -125,41 +125,41 @@ export class EditorController {
   undo(): void {
     this.session.undo();
     this.ensureSelectionValid();
-    this.notify();
+    this.emitProjectChange();
   }
 
   redo(): void {
     this.session.redo();
     this.ensureSelectionValid();
-    this.notify();
+    this.emitProjectChange();
   }
 
   setPlaying(playing: boolean): void {
     this.playback.playing = playing;
-    this.notify();
+    this.emit();
   }
 
   togglePlayback(): void {
     this.playback.playing = !this.playback.playing;
-    this.notify();
+    this.emit();
   }
 
   setCurrentTime(time: number): void {
     const duration = this.session.getProject().timeline.duration;
     this.playback.currentTime = Math.min(Math.max(0, time), duration);
-    this.notify();
+    this.emit();
   }
 
   loadProject(project: EffectForgeProject): void {
     this.session = new CommandSession(project);
     this.selectedLayerId = project.layers[0]?.id ?? null;
     this.playback = { playing: true, currentTime: 0 };
-    this.notify();
+    this.emitProjectChange();
   }
 
   execute(command: unknown): void {
     this.session.execute(command);
-    this.notify();
+    this.emitProjectChange();
   }
 
   executeOpacityDrag(layerId: string, opacity: number): void {
@@ -169,6 +169,7 @@ export class EditorController {
         payload: { layerId, opacity },
       });
     }, "SetLayerOpacity");
+    this.emitProjectChange();
   }
 
   private ensureSelectionValid(): void {
@@ -178,11 +179,15 @@ export class EditorController {
     }
   }
 
-  private notify(): void {
-    this.revision += 1;
+  private emit(): void {
     for (const listener of this.listeners) {
       listener();
     }
+  }
+
+  private emitProjectChange(): void {
+    this.projectRevision += 1;
+    this.emit();
   }
 }
 

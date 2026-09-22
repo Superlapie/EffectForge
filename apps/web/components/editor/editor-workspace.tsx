@@ -54,7 +54,7 @@ export function EditorWorkspace() {
         <section className="relative min-h-[280px] flex-1 overflow-hidden bg-black">
           <EffectViewport
             project={state.project}
-            revision={state.revision}
+            projectRevision={state.projectRevision}
             playing={state.playback.playing}
             currentTime={state.playback.currentTime}
             onTimeUpdate={(time) => {

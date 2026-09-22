@@ -11,8 +11,8 @@ export interface EditorState {
   playback: EditorPlaybackState;
   canUndo: boolean;
   canRedo: boolean;
-  /** Increments on every editor mutation for viewport sync. */
-  revision: number;
+  /** Increments when the project document changes (not playback/selection). */
+  projectRevision: number;
 }
 
 export function getSelectedLayer(state: EditorState): Layer | null {
