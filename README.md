@@ -52,6 +52,10 @@ docs/          architecture and format documentation
 
 See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for package dependency flow.
 
+## Publishing and deployment
+
+To create a **public GitHub repository** and connect **Vercel**, use the **Publish** button in Cursor (Reconnect to GitHub if prompted). See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for details.
+
 ## License
 
 MIT — see LICENSE file. Third-party attributions in [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).

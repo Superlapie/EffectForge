@@ -37,7 +37,7 @@ cli, mcp ------ core / commands / exporters
 - **@effectforge/schema** — Zod 4 schemas for projects, layers, curves, gradients, value sources, assets
 - **@effectforge/core** — Project creation, validation, migration framework, diagnostics, deterministic PRNG
 - **@effectforge/renderer** — Renderer interface contract (stub)
-- **@effectforge/commands** — Command types stub (Phase 2)
+- **@effectforge/commands** — Command validation, execution, undo/redo, transactions
 - **@effectforge/web** — Next.js 16 landing page and editor placeholder
 - **@effectforge/cli** — Minimal validate/create/inspect commands
 
@@ -45,9 +45,21 @@ cli, mcp ------ core / commands / exporters
 
 See `ROADMAP.md` for the full phased delivery plan.
 
-## Command system (Phase 2)
+## Command system
 
-All persistent project mutations will go through validated commands with undo/redo and transaction grouping. Editor UI, CLI, and MCP will share the same command executor.
+All persistent project mutations go through validated commands with undo/redo and transaction grouping. `CommandSession` wraps execution and history. Editor UI, CLI, and MCP will share the same command executor.
+
+```text
+UI / CLI / MCP → validateCommand → executeCommand → CommandSession (history)
+```
+
+Transaction pattern for slider drags:
+
+```text
+BeginTransaction → many SetLayerOpacity → CommitTransaction
+```
+
+Undo restores the pre-transaction state in one step.
 
 ## Renderer design (Phase 3+)
 

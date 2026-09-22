@@ -29,12 +29,12 @@ Features are marked complete only when implementation works, tests exist, and in
 
 ## Phase 2: Command Engine
 
-- [ ] Command definitions (discriminated unions)
-- [ ] Command validation
-- [ ] Executor
-- [ ] History with undo/redo
-- [ ] Transaction grouping
-- [ ] Tests
+- [x] Command definitions (discriminated unions)
+- [x] Command validation
+- [x] Executor
+- [x] History with undo/redo (Immer patches)
+- [x] Transaction grouping
+- [x] Tests
 
 ## Phase 3: Renderer Foundation
 

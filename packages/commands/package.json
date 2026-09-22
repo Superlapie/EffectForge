@@ -23,6 +23,7 @@
   "dependencies": {
     "@effectforge/core": "workspace:*",
     "@effectforge/schema": "workspace:*",
+    "immer": "^10.1.3",
     "zod": "^4.1.11"
   },
   "devDependencies": {
