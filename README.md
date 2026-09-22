@@ -6,7 +6,7 @@ Visual authoring and compilation environment for creating production-ready inter
 
 ## Status
 
-Early development. Phase 0 (repository bootstrap) and Phase 1 (schema and core project model) are complete. See [STATUS.md](./STATUS.md) for current capabilities.
+Early development. Phases 0–3 are complete (monorepo bootstrap, schema/core, command engine, Three.js renderer foundation). See [STATUS.md](./STATUS.md) for current capabilities.
 
 ## Development
 
