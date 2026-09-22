@@ -1,6 +1,6 @@
 # EffectForge Status
 
-Last updated: Phase 7 complete
+Last updated: Phase 8 complete
 
 ## What currently works
 
@@ -15,24 +15,26 @@ Last updated: Phase 7 complete
 - **@effectforge/presets** — Production presets (cursor attract, repel, click burst)
 - **@effectforge/commands** — Command engine with Zod validation, executor, Immer patch history, undo/redo, transactions
 - **@effectforge/editor** — EditorController, playback state, keyboard shortcuts, layer/project mutations
-- **@effectforge/web** — Next.js 16 landing page and full web editor at `/editor`
-- **@effectforge/cli** — `inspect`, `create`, `validate` commands
+- **@effectforge/project-format** — `.effectforge` ZIP pack/unpack with validation and safety limits
+- **@effectforge/web** — Next.js 16 landing page and web editor at `/editor` with open/save
+- **@effectforge/cli** — `inspect`, `create`, `validate`, `pack`, `unpack` commands
 - **License audit tooling** — Automated dependency license check
 
 ## What is partially implemented
 
-- **CLI** — Only basic validate/create/inspect; full commands in Phase 19
+- **CLI** — Basic validate/create/inspect/pack/unpack; full commands in Phase 19
 - **Desktop / MCP apps** — Package stubs only
 - **Inspector** — Particle layers only; other layer kinds and advanced curves in later phases
+- **Asset binaries** — Archive format supports `assets/` entries; editor does not yet manage binary assets
 
 ## What is not implemented
 
-- Project persistence / `.effectforge` archives (Phase 8)
-- Preset export, post-processing, trails, and all later phases
+- Preset export bundles (Phase 9+)
+- Post-processing, trails, and all later phases
 
 ## What is being worked on next
 
-**Phase 8: Project Persistence** — Save/load `.effectforge` archives
+**Phase 9+** — See ROADMAP.md for upcoming features
 
 ## Known regressions
 

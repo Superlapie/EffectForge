@@ -35,6 +35,9 @@ importers:
       '@effectforge/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@effectforge/project-format':
+        specifier: workspace:*
+        version: link:../../packages/project-format
       '@effectforge/schema':
         specifier: workspace:*
         version: link:../../packages/schema
@@ -61,6 +64,9 @@ importers:
       '@effectforge/presets':
         specifier: workspace:*
         version: link:../../packages/presets
+      '@effectforge/project-format':
+        specifier: workspace:*
+        version: link:../../packages/project-format
       '@effectforge/renderer-three':
         specifier: workspace:*
         version: link:../../packages/renderer-three
@@ -184,6 +190,25 @@ importers:
       '@effectforge/core':
         specifier: workspace:*
         version: link:../core
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+
+  packages/project-format:
+    dependencies:
+      '@effectforge/core':
+        specifier: workspace:*
+        version: link:../core
+      '@effectforge/schema':
+        specifier: workspace:*
+        version: link:../schema
+      fflate:
+        specifier: ^0.8.2
+        version: 0.8.3
+    devDependencies:
+      '@types/node':
+        specifier: ^20.19.43
+        version: 20.19.43
       vitest:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)

@@ -12,7 +12,7 @@ export default function EditorPage() {
         </Link>
         <span className="text-xs text-text-muted">Editor</span>
         <span className="hidden text-xs text-text-muted sm:inline">
-          Space to play/pause · Ctrl+Z undo · Delete to remove layer
+          Ctrl+S save · Open/Save toolbar · Space play/pause · Ctrl+Z undo
         </span>
       </div>
       <div className="min-h-0 flex-1">

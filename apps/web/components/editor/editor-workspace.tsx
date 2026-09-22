@@ -7,6 +7,7 @@ import {
 import { createProjectFromPreset } from "@effectforge/presets";
 import { useEffect, useMemo } from "react";
 import { EffectViewport } from "../effect-viewport";
+import { saveProjectArchive } from "./project-io";
 import { EditorTimeline } from "./editor-timeline";
 import { EditorToolbar } from "./editor-toolbar";
 import { LayerInspector } from "./layer-inspector";
@@ -23,6 +24,22 @@ export function EditorWorkspace() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "s") {
+        const target = event.target;
+        if (
+          target &&
+          typeof target === "object" &&
+          "tagName" in target &&
+          (target.tagName === "INPUT" ||
+            target.tagName === "TEXTAREA" ||
+            target.tagName === "SELECT")
+        ) {
+          return;
+        }
+        event.preventDefault();
+        saveProjectArchive(controller);
+        return;
+      }
       handleEditorShortcut(controller, event);
     };
     window.addEventListener("keydown", onKeyDown);

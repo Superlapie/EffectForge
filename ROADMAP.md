@@ -72,6 +72,13 @@ Features are marked complete only when implementation works, tests exist, and in
 - [x] Undo/redo, keyboard shortcuts
 - [x] Usable web application
 
-## Phase 8–29
+## Phase 8: Project Persistence
+
+- [x] `.effectforge` ZIP archive pack/unpack
+- [x] Path containment and size limits
+- [x] CLI `pack` and `unpack` commands
+- [x] Editor open/save integration
+
+## Phase 9–29
 
 See master specification for remaining phases. Each will be checked off as completed.

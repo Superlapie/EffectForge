@@ -4,7 +4,7 @@ The web editor at `/editor` provides a minimal authoring surface for particle ef
 
 ## Layout
 
-- **Toolbar** — Project name, preset loader, undo/redo, play/pause
+- **Toolbar** — Project name, open/save `.effectforge`, preset loader, undo/redo, play/pause
 - **Layer panel** — Select, enable/disable, duplicate, and add particle layers
 - **Viewport** — Live WebGL preview with pointer interaction
 - **Inspector** — Edit layer name, opacity, emission rate, and common particle parameters
@@ -18,6 +18,7 @@ The web editor at `/editor` provides a minimal authoring surface for particle ef
 | `Ctrl+Shift+Z` / `Ctrl+Y` | Redo |
 | `Space` | Toggle play/pause |
 | `Delete` / `Backspace` | Remove selected layer |
+| `Ctrl+S` / `Cmd+S` | Save `.effectforge` archive |
 
 Shortcuts are ignored while typing in form fields.
 

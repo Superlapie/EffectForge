@@ -29,7 +29,7 @@ EffectForge projects are JSON documents with:
 - `group` — Layer grouping
 - `event` — Event-triggered actions
 
-## Archive format (Phase 8)
+## Archive format
 
 Projects are distributed as `.effectforge` ZIP archives:
 
@@ -46,6 +46,19 @@ my-effect.effectforge
 ```
 
 Archive extraction enforces path containment, size limits, and entry count limits.
+
+### Pack and unpack
+
+```bash
+# CLI
+effectforge pack project.json my-effect.effectforge
+effectforge unpack my-effect.effectforge ./output
+
+# Library
+import { packProject, unpackProject } from "@effectforge/project-format";
+```
+
+The web editor provides **Open** and **Save** buttons (or `Ctrl+S`) to load and download `.effectforge` archives in the browser.
 
 ## Versioning
 

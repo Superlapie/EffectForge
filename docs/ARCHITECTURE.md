@@ -14,7 +14,7 @@ core
   |
   +------ renderer abstractions (Phase 3)
   |
-  +------ project-format (Phase 8)
+  +------ project-format
 
 renderer-three (Phase 3+)
   |
@@ -43,8 +43,9 @@ cli, mcp ------ core / commands / exporters
 - **@effectforge/presets** — Production effect presets
 - **@effectforge/commands** — Command validation, execution, undo/redo, transactions
 - **@effectforge/editor** — EditorController, selection, playback, keyboard shortcuts
+- **@effectforge/project-format** — `.effectforge` ZIP archives with pack/unpack and safety limits
 - **@effectforge/web** — Next.js 16 landing page and web editor at `/editor`
-- **@effectforge/cli** — Minimal validate/create/inspect commands
+- **@effectforge/cli** — validate/create/inspect/pack/unpack commands
 
 ### Planned
 

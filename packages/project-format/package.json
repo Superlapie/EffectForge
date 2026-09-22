@@ -1,0 +1,32 @@
+{
+  "name": "@effectforge/project-format",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "EffectForge .effectforge archive pack and unpack",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@effectforge/core": "workspace:*",
+    "@effectforge/schema": "workspace:*",
+    "fflate": "^0.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "vitest": "^3.2.4"
+  }
+}
