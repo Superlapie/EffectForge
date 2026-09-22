@@ -109,6 +109,14 @@ Features are marked complete only when implementation works, tests exist, and in
 - [x] `createDefaultPostFxLayer()` and editor bloom inspector
 - [x] `sparkles-bloom` preset
 
-## Phase 13–29
+## Phase 13: Distortion Layers
+
+- [x] `@effectforge/distortion` layer resolution
+- [x] `DistortionPipeline` render-target pass chain in `renderer-three`
+- [x] Ripple, heat-haze, liquid, lens, chromatic-warp, glitch-displacement, pixel-displacement shaders
+- [x] `createDefaultDistortionLayer()` and editor ripple inspector
+- [x] `sparkles-ripple` preset
+
+## Phase 14–29
 
 See master specification for remaining phases. Each will be checked off as completed.

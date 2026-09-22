@@ -289,22 +289,34 @@ export class PostFxPipeline {
     webgl.clear();
     renderScene();
 
-    let inputTexture: Texture = this.readBuffer.texture;
+    this.renderFromTexture(webgl, this.readBuffer.texture, time);
+  }
+
+  /** Apply postfx passes to an existing input texture and present to screen. */
+  renderFromTexture(webgl: WebGLRenderer, inputTexture: Texture, time: number): void {
+    if (this.layers.length === 0) {
+      setUniform(this.copyPass.material, "tDiffuse", inputTexture);
+      webgl.setRenderTarget(null);
+      this.renderPass(webgl, this.copyPass);
+      return;
+    }
+
+    let currentTexture = inputTexture;
 
     for (const { layer, effect } of this.layers) {
       const pass = this.getPassForEffect(effect);
-      setUniform(pass.material, "tDiffuse", inputTexture);
+      setUniform(pass.material, "tDiffuse", currentTexture);
       applyUniforms(pass.material, effect, layer.opacity, time, this.width, this.height);
 
       webgl.setRenderTarget(this.writeBuffer);
       webgl.clear();
       this.renderPass(webgl, pass);
 
-      inputTexture = this.writeBuffer.texture;
+      currentTexture = this.writeBuffer.texture;
       this.swapBuffers();
     }
 
-    setUniform(this.copyPass.material, "tDiffuse", inputTexture);
+    setUniform(this.copyPass.material, "tDiffuse", currentTexture);
     webgl.setRenderTarget(null);
     this.renderPass(webgl, this.copyPass);
   }

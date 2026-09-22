@@ -2,6 +2,7 @@
 
 import { getSelectedLayer, type EditorController } from "@effectforge/editor";
 import type {
+  DistortionLayer,
   NumericValueSource,
   ParticleLayer,
   PostFxLayer,
@@ -21,6 +22,17 @@ export function LayerInspector({ controller }: LayerInspectorProps) {
     return (
       <aside className="w-full border-t border-border-subtle p-4 lg:w-72 lg:border-l lg:border-t-0">
         <p className="text-sm text-text-muted">Select a layer to inspect its properties.</p>
+      </aside>
+    );
+  }
+
+  if (layer.kind === "distortion") {
+    return (
+      <aside className="flex w-full flex-col border-t border-border-subtle lg:w-72 lg:border-l lg:border-t-0">
+        <div className="border-b border-border-subtle px-4 py-2">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Inspector</h2>
+        </div>
+        <DistortionInspector controller={controller} layer={layer} />
       </aside>
     );
   }
@@ -65,6 +77,109 @@ export function LayerInspector({ controller }: LayerInspectorProps) {
       </div>
       <ParticleInspector controller={controller} layer={layer} />
     </aside>
+  );
+}
+
+function DistortionInspector({
+  controller,
+  layer,
+}: {
+  controller: EditorController;
+  layer: DistortionLayer;
+}) {
+  return (
+    <div className="space-y-4 overflow-y-auto p-4">
+      <Field label="Name">
+        <input
+          type="text"
+          value={layer.name}
+          onChange={(event) => controller.setLayerName(layer.id, event.target.value)}
+          className="w-full rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-sm"
+        />
+      </Field>
+
+      <SliderField
+        label="Opacity"
+        value={layer.opacity}
+        min={0}
+        max={1}
+        step={0.01}
+        onChange={(value) => controller.setLayerOpacity(layer.id, value)}
+      />
+
+      {layer.effect.type === "ripple" ? (
+        <>
+          <SliderField
+            label="Amplitude"
+            value={layer.effect.amplitude}
+            min={0}
+            max={0.1}
+            step={0.001}
+            onChange={(value) => controller.setDistortionEffectProperty(layer.id, "amplitude", value)}
+          />
+          <SliderField
+            label="Frequency"
+            value={layer.effect.frequency}
+            min={1}
+            max={60}
+            step={1}
+            onChange={(value) => controller.setDistortionEffectProperty(layer.id, "frequency", value)}
+          />
+          <SliderField
+            label="Speed"
+            value={layer.effect.speed}
+            min={0.1}
+            max={5}
+            step={0.1}
+            onChange={(value) => controller.setDistortionEffectProperty(layer.id, "speed", value)}
+          />
+        </>
+      ) : null}
+
+      {layer.effect.type === "heat-haze" ? (
+        <>
+          <SliderField
+            label="Intensity"
+            value={layer.effect.intensity}
+            min={0}
+            max={1}
+            step={0.01}
+            onChange={(value) => controller.setDistortionEffectProperty(layer.id, "intensity", value)}
+          />
+          <SliderField
+            label="Speed"
+            value={layer.effect.speed}
+            min={0.1}
+            max={5}
+            step={0.1}
+            onChange={(value) => controller.setDistortionEffectProperty(layer.id, "speed", value)}
+          />
+        </>
+      ) : null}
+
+      {layer.effect.type === "lens" ? (
+        <>
+          <SliderField
+            label="Strength"
+            value={layer.effect.strength}
+            min={0}
+            max={2}
+            step={0.05}
+            onChange={(value) => controller.setDistortionEffectProperty(layer.id, "strength", value)}
+          />
+          <SliderField
+            label="Radius"
+            value={layer.effect.radius}
+            min={0.05}
+            max={1}
+            step={0.01}
+            onChange={(value) => controller.setDistortionEffectProperty(layer.id, "radius", value)}
+          />
+        </>
+      ) : null}
+
+      <p className="text-xs text-text-muted">Effect: {layer.effect.type}</p>
+    </div>
   );
 }
 

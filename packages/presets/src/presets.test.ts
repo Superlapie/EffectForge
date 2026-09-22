@@ -4,7 +4,7 @@ import { createProjectFromPreset, listPresets } from "./index.js";
 
 describe("effect presets", () => {
   it("lists production presets", () => {
-    expect(listPresets()).toHaveLength(5);
+    expect(listPresets()).toHaveLength(6);
   });
 
   it("creates valid projects for every preset", () => {

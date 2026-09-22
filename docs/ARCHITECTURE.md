@@ -21,7 +21,8 @@ renderer-three (Phase 3+)
   +------ particles (Phase 4+)
   +------ trails (Phase 11)
   +------ postfx (Phase 12)
-  +------ distortion, text-effects (later phases)
+  +------ distortion (Phase 13)
+  +------ text-effects (later phases)
 
 editor (Phase 7)
   |
@@ -43,6 +44,7 @@ cli, mcp ------ core / commands / exporters
 - **@effectforge/particles** — Custom particle engine (SoA store, emitters, behaviors, pointer interaction)
 - **@effectforge/trails** — Cursor trail ring-buffer simulation
 - **@effectforge/postfx** — Post-processing layer resolution and pipeline
+- **@effectforge/distortion** — Distortion layer resolution and displacement pipeline
 - **@effectforge/pointer** — Normalized pointer input service
 - **@effectforge/presets** — Production effect presets
 - **@effectforge/commands** — Command validation, execution, undo/redo, transactions

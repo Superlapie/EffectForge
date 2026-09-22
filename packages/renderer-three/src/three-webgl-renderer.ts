@@ -14,10 +14,12 @@ import {
   ShaderMaterial,
   WebGLRenderer,
 } from "three";
+import { resolveDistortionLayers } from "@effectforge/distortion";
 import { resolvePostFxLayers } from "@effectforge/postfx";
 import { PointerService } from "@effectforge/pointer";
 import { SimulationClock } from "./clock.js";
 import { ParticleScene } from "./particle-scene.js";
+import { DistortionPipeline } from "./distortion-pipeline.js";
 import { PostFxPipeline } from "./postfx-pipeline.js";
 import { TrailScene } from "./trail-scene.js";
 import { applyCanvasBackground } from "./scene-background.js";
@@ -70,6 +72,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
   private testQuad: Mesh | null = null;
   private particleScene: ParticleScene | null = null;
   private trailScene: TrailScene | null = null;
+  private distortionPipeline: DistortionPipeline | null = null;
   private postFxPipeline: PostFxPipeline | null = null;
   private project: EffectForgeProject | null = null;
 
@@ -142,6 +145,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     applyCanvasBackground(this.scene!, project.canvas.background);
     this.particleScene = new ParticleScene(project, this.scene!, this.pointer);
     this.trailScene = new TrailScene(project, this.scene!, this.pointer);
+    this.syncDistortionPipeline(project);
     this.syncPostFxPipeline(project);
     this.setTestQuadVisible(this.getEffectLayerCount() === 0);
     this.resize(project.canvas.width, project.canvas.height, this.dpr);
@@ -153,6 +157,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     this.project = project;
     applyCanvasBackground(this.scene!, project.canvas.background);
 
+    this.syncDistortionPipeline(project);
     this.syncPostFxPipeline(project);
 
     const particlesSynced = this.particleScene?.syncProjectLayers(project) ?? true;
@@ -178,6 +183,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     const pixelWidth = Math.round(this.width * this.dpr);
     const pixelHeight = Math.round(this.height * this.dpr);
     this.webgl!.setSize(pixelWidth, pixelHeight, false);
+    this.distortionPipeline?.setSize(pixelWidth, pixelHeight);
     this.postFxPipeline?.setSize(pixelWidth, pixelHeight);
 
     const aspect = this.width / this.height;
@@ -240,8 +246,22 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
       this.webgl!.render(this.scene!, this.camera!);
     };
 
-    if (this.postFxPipeline && this.postFxPipeline.activeLayerCount > 0) {
-      this.postFxPipeline.render(this.webgl!, renderScene, this.clock.getTime());
+    const hasDistortion = (this.distortionPipeline?.activeLayerCount ?? 0) > 0;
+    const hasPostFx = (this.postFxPipeline?.activeLayerCount ?? 0) > 0;
+    const time = this.clock.getTime();
+
+    if (hasDistortion && hasPostFx) {
+      const texture = this.distortionPipeline!.render(
+        this.webgl!,
+        renderScene,
+        time,
+        false,
+      );
+      this.postFxPipeline!.renderFromTexture(this.webgl!, texture, time);
+    } else if (hasDistortion) {
+      this.distortionPipeline!.render(this.webgl!, renderScene, time);
+    } else if (hasPostFx) {
+      this.postFxPipeline!.render(this.webgl!, renderScene, time);
     } else {
       renderScene();
     }
@@ -251,6 +271,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
       1 +
       (this.particleScene?.layerCount ?? 0) +
       (this.trailScene?.layerCount ?? 0) +
+      (this.distortionPipeline?.activeLayerCount ?? 0) +
       (this.postFxPipeline?.activeLayerCount ?? 0);
     this.stats.setRenderInfo(drawCalls, batchCount);
     this.stats.setParticleCount(this.particleScene?.totalActiveParticles ?? 0);
@@ -299,6 +320,8 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     }
 
     this.clearEffectScenes();
+    this.distortionPipeline?.dispose();
+    this.distortionPipeline = null;
     this.postFxPipeline?.dispose();
     this.postFxPipeline = null;
     this.testQuad?.geometry.dispose();
@@ -370,6 +393,16 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
 
   private getEffectLayerCount(): number {
     return (this.particleScene?.layerCount ?? 0) + (this.trailScene?.layerCount ?? 0);
+  }
+
+  private syncDistortionPipeline(project: EffectForgeProject): void {
+    const layers = resolveDistortionLayers(project);
+    if (!this.distortionPipeline) {
+      const pixelWidth = Math.round(this.width * this.dpr);
+      const pixelHeight = Math.round(this.height * this.dpr);
+      this.distortionPipeline = new DistortionPipeline(pixelWidth, pixelHeight);
+    }
+    this.distortionPipeline.setLayers(layers);
   }
 
   private syncPostFxPipeline(project: EffectForgeProject): void {

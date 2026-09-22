@@ -33,6 +33,13 @@ export function LayerPanel({ controller }: LayerPanelProps) {
           </button>
           <button
             type="button"
+            onClick={() => controller.addDistortionLayer("ripple")}
+            className="rounded border border-border-subtle px-2 py-0.5 text-xs text-text-secondary hover:border-accent hover:text-text-primary"
+          >
+            + Ripple
+          </button>
+          <button
+            type="button"
             onClick={() => controller.addPostFxLayer("bloom")}
             className="rounded border border-border-subtle px-2 py-0.5 text-xs text-text-secondary hover:border-accent hover:text-text-primary"
           >

@@ -1,8 +1,10 @@
 import { CommandSession } from "@effectforge/commands";
 import {
   createDefaultParticleLayer,
+  createDefaultDistortionLayer,
   createDefaultPostFxLayer,
   createDefaultTrailLayer,
+  type DefaultDistortionEffect,
   type DefaultPostFxEffect,
 } from "@effectforge/core";
 import type { EffectForgeProject, Layer } from "@effectforge/schema";
@@ -114,6 +116,16 @@ export class EditorController {
     this.emit();
   }
 
+  addDistortionLayer(effect: DefaultDistortionEffect = "ripple"): void {
+    const layer = createDefaultDistortionLayer(
+      effect === "ripple" ? "Ripple" : effect === "heat-haze" ? "Heat Haze" : "Lens",
+      effect,
+    );
+    this.execute({ type: "AddLayer", payload: { layer } });
+    this.selectedLayerId = layer.id;
+    this.emit();
+  }
+
   addPostFxLayer(effect: DefaultPostFxEffect = "bloom"): void {
     const layer = createDefaultPostFxLayer(
       effect === "bloom" ? "Bloom" : effect === "vignette" ? "Vignette" : "Chromatic",
@@ -125,6 +137,17 @@ export class EditorController {
   }
 
   setPostFxEffectProperty(
+    layerId: string,
+    path: string,
+    value: number,
+  ): void {
+    this.execute({
+      type: "SetLayerProperty",
+      payload: { layerId, path: `effect.${path}`, value },
+    });
+  }
+
+  setDistortionEffectProperty(
     layerId: string,
     path: string,
     value: number,

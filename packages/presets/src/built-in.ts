@@ -4,13 +4,15 @@ import { createCursorAttractSparkles } from "./definitions/cursor-attract-sparkl
 import { createCursorRepelMist } from "./definitions/cursor-repel-mist.js";
 import { createCursorTrailGlow } from "./definitions/cursor-trail-glow.js";
 import { createSparklesBloom } from "./definitions/sparkles-bloom.js";
+import { createSparklesRipple } from "./definitions/sparkles-ripple.js";
 
 export type BuiltinPresetId =
   | "cursor-attract-sparkles"
   | "cursor-repel-mist"
   | "click-burst-stars"
   | "cursor-trail-glow"
-  | "sparkles-bloom";
+  | "sparkles-bloom"
+  | "sparkles-ripple";
 
 export interface EffectPreset {
   id: string;
@@ -27,6 +29,7 @@ export const BUILTIN_PRESET_PROJECT_IDS: Record<string, BuiltinPresetId> = {
   proj_click_burst_stars: "click-burst-stars",
   proj_cursor_trail_glow: "cursor-trail-glow",
   proj_sparkles_bloom: "sparkles-bloom",
+  proj_sparkles_ripple: "sparkles-ripple",
 };
 
 export function findBuiltinPresetIdForProject(projectId: string): BuiltinPresetId | undefined {
@@ -68,5 +71,12 @@ export const BUILTIN_PRESETS: EffectPreset[] = [
     description: "Cursor-attract sparkles with a cinematic bloom post-processing pass.",
     tags: ["pointer", "sparkles", "bloom", "postfx"],
     create: createSparklesBloom,
+  },
+  {
+    id: "sparkles-ripple",
+    name: "Sparkles + Ripple",
+    description: "Cursor-attract sparkles with a subtle animated ripple distortion.",
+    tags: ["pointer", "sparkles", "ripple", "distortion"],
+    create: createSparklesRipple,
   },
 ];

@@ -152,6 +152,16 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
 
+  packages/distortion:
+    dependencies:
+      '@effectforge/schema':
+        specifier: workspace:*
+        version: link:../schema
+    devDependencies:
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+
   packages/editor:
     dependencies:
       '@effectforge/commands':
@@ -266,6 +276,9 @@ importers:
 
   packages/renderer-three:
     dependencies:
+      '@effectforge/distortion':
+        specifier: workspace:*
+        version: link:../distortion
       '@effectforge/particles':
         specifier: workspace:*
         version: link:../particles

@@ -106,6 +106,8 @@ export function createDefaultTrailLayer(
 
 export type DefaultPostFxEffect = "bloom" | "vignette" | "chromatic-aberration";
 
+export type DefaultDistortionEffect = "ripple" | "heat-haze" | "lens";
+
 /** Create a default post-processing layer for quick authoring. */
 export function createDefaultPostFxLayer(
   name = "Bloom",
@@ -122,6 +124,30 @@ export function createDefaultPostFxLayer(
     id: generateUniqueId("layer_"),
     name,
     kind: "postfx",
+    enabled: true,
+    locked: false,
+    opacity: 1,
+    blendMode: "normal",
+    effect: effectConfig,
+  };
+}
+
+/** Create a default distortion layer for quick authoring. */
+export function createDefaultDistortionLayer(
+  name = "Ripple",
+  effect: DefaultDistortionEffect = "ripple",
+): Layer {
+  const effectConfig =
+    effect === "ripple"
+      ? { type: "ripple" as const, amplitude: 0.02, frequency: 20, speed: 2 }
+      : effect === "heat-haze"
+        ? { type: "heat-haze" as const, intensity: 0.5, speed: 1 }
+        : { type: "lens" as const, strength: 0.5, radius: 0.3 };
+
+  return {
+    id: generateUniqueId("layer_"),
+    name,
+    kind: "distortion",
     enabled: true,
     locked: false,
     opacity: 1,

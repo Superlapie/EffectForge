@@ -27,7 +27,9 @@ export {
   createDefaultParticleLayer,
   createDefaultTrailLayer,
   createDefaultPostFxLayer,
+  createDefaultDistortionLayer,
   type CreateProjectOptions,
   type CreateDefaultTrailLayerOptions,
   type DefaultPostFxEffect,
+  type DefaultDistortionEffect,
 } from "./create-project.js";
