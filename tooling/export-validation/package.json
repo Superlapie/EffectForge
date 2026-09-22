@@ -1,0 +1,15 @@
+{
+  "name": "@effectforge/export-validation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Validates exported EffectForge projects install and build",
+  "license": "MIT",
+  "scripts": {
+    "validate": "node src/validate.mjs"
+  },
+  "dependencies": {
+    "@effectforge/exporter-core": "workspace:*",
+    "@effectforge/presets": "workspace:*"
+  }
+}

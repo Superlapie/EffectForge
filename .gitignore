@@ -39,5 +39,6 @@ pnpm-debug.log*
 
 # Temp
 tmp-scaffold/
+tooling/export-validation/.tmp/
 .vercel
 .env*

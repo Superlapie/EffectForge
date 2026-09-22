@@ -13,6 +13,7 @@
   "dependencies": {
     "@effectforge/core": "workspace:*",
     "@effectforge/editor": "workspace:*",
+    "@effectforge/exporter-core": "workspace:*",
     "@effectforge/project-format": "workspace:*",
     "@effectforge/presets": "workspace:*",
     "@effectforge/renderer-three": "workspace:*",

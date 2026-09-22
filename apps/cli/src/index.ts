@@ -7,6 +7,11 @@ import {
   suggestPresetBundleFilename,
   unpackPresetBundle,
 } from "@effectforge/presets";
+import {
+  exportProject,
+  listExportTargets,
+  type ExportTarget,
+} from "@effectforge/exporter-core";
 import { packProject, PROJECT_JSON_PATH, unpackProject } from "@effectforge/project-format";
 import { CURRENT_FORMAT_VERSION, FORMAT_NAME } from "@effectforge/schema";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -25,6 +30,7 @@ Usage:
   effectforge preset list
   effectforge preset pack <project.json> [output.effectforge-preset]
   effectforge preset unpack <bundle.effectforge-preset> [dir]
+  effectforge export <project.json> --target <vanilla|react-vite|nextjs> [-o dir]
   effectforge inspect                              Print format info
   effectforge create                               Create a sample project JSON
 
@@ -169,6 +175,47 @@ async function main(): Promise<void> {
 
     console.error("Unknown preset command. Use: list, pack, unpack");
     process.exit(1);
+  }
+
+  if (command === "export") {
+    const inputPath = args[1];
+    const targetIndex = args.indexOf("--target");
+    const outputIndex = args.indexOf("-o");
+    const target = targetIndex >= 0 ? args[targetIndex + 1] : undefined;
+    const outputDir =
+      outputIndex >= 0 ? args[outputIndex + 1] : inputPath ? join(dirname(inputPath), "export") : undefined;
+
+    if (!inputPath || !target) {
+      console.error(`Error: usage: effectforge export <project.json> --target <${listExportTargets().join("|")}> [-o dir]`);
+      process.exit(1);
+    }
+
+    if (!listExportTargets().includes(target as ExportTarget)) {
+      console.error(`Error: unknown target "${target}". Use: ${listExportTargets().join(", ")}`);
+      process.exit(1);
+    }
+
+    const raw = await readFile(inputPath, "utf-8");
+    const doc = JSON.parse(raw) as Record<string, unknown>;
+    const validation = validateProject(doc);
+    if (!validation.success || !validation.project) {
+      console.error("Validation failed:");
+      for (const d of validation.diagnostics) {
+        console.error(`  [${d.severity}] ${d.code}: ${d.message}`);
+      }
+      process.exit(1);
+    }
+
+    const result = exportProject(validation.project, target as ExportTarget);
+    await mkdir(outputDir!, { recursive: true });
+    for (const file of result.files) {
+      const filePath = join(outputDir!, file.path);
+      await mkdir(dirname(filePath), { recursive: true });
+      await writeFile(filePath, file.content, "utf-8");
+    }
+
+    console.log(`Exported ${result.target} project to ${outputDir} (${result.files.length} files)`);
+    process.exit(0);
   }
 
   if (command === "unpack") {

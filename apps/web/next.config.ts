@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
     "@effectforge/commands",
     "@effectforge/core",
     "@effectforge/editor",
+    "@effectforge/exporter-core",
+    "@effectforge/runtime",
     "@effectforge/project-format",
     "@effectforge/presets",
     "@effectforge/pointer",

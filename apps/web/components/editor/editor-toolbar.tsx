@@ -3,6 +3,8 @@
 import type { EditorController } from "@effectforge/editor";
 import { findPreset, listAllPresets } from "@effectforge/presets";
 import { useRef, useState } from "react";
+import type { ExportTarget } from "@effectforge/exporter-core";
+import { downloadExportedCode } from "./export-code";
 import { exportPresetBundle, importPresetBundleFile } from "./preset-io";
 import { openProjectArchive, saveProjectArchive } from "./project-io";
 import { useEditorState } from "./use-editor-controller";
@@ -99,6 +101,23 @@ export function EditorToolbar({ controller }: EditorToolbarProps) {
           >
             Export preset
           </button>
+          <select
+            onChange={(event) => {
+              const target = event.target.value as ExportTarget;
+              if (target) {
+                downloadExportedCode(controller, target);
+                event.target.value = "";
+              }
+            }}
+            className="rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-xs text-text-secondary"
+            defaultValue=""
+            aria-label="Export code"
+          >
+            <option value="" disabled>Export code…</option>
+            <option value="vanilla">Vanilla + Vite</option>
+            <option value="react-vite">React + Vite</option>
+            <option value="nextjs">Next.js</option>
+          </select>
           <input
             ref={projectInputRef}
             type="file"

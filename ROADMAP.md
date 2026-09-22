@@ -86,6 +86,13 @@ Features are marked complete only when implementation works, tests exist, and in
 - [x] CLI `preset list`, `preset pack`, `preset unpack`
 - [x] Editor export/import preset integration
 
-## Phase 10–29
+## Phase 10: Code Exporters
+
+- [x] `@effectforge/runtime` mount API
+- [x] `@effectforge/exporter-core` with vanilla, React+Vite, Next.js exporters
+- [x] CLI `export` command and editor export ZIP download
+- [x] CI export validation (vanilla + react-vite builds)
+
+## Phase 11–29
 
 See master specification for remaining phases. Each will be checked off as completed.

@@ -44,8 +44,10 @@ cli, mcp ------ core / commands / exporters
 - **@effectforge/commands** — Command validation, execution, undo/redo, transactions
 - **@effectforge/editor** — EditorController, selection, playback, keyboard shortcuts
 - **@effectforge/project-format** — `.effectforge` ZIP archives with pack/unpack and safety limits
+- **@effectforge/runtime** — `mountEffect()` for exported standalone projects
+- **@effectforge/exporter-core** — Vanilla, React+Vite, and Next.js code exporters
 - **@effectforge/web** — Next.js 16 landing page and web editor at `/editor`
-- **@effectforge/cli** — validate/create/inspect/pack/unpack commands
+- **@effectforge/cli** — validate, pack/unpack, preset, and export commands
 
 ### Planned
 

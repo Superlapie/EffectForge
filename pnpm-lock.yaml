@@ -35,6 +35,9 @@ importers:
       '@effectforge/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@effectforge/exporter-core':
+        specifier: workspace:*
+        version: link:../../packages/exporter-core
       '@effectforge/presets':
         specifier: workspace:*
         version: link:../../packages/presets
@@ -64,6 +67,9 @@ importers:
       '@effectforge/editor':
         specifier: workspace:*
         version: link:../../packages/editor
+      '@effectforge/exporter-core':
+        specifier: workspace:*
+        version: link:../../packages/exporter-core
       '@effectforge/presets':
         specifier: workspace:*
         version: link:../../packages/presets
@@ -157,6 +163,22 @@ importers:
       '@effectforge/schema':
         specifier: workspace:*
         version: link:../schema
+    devDependencies:
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+
+  packages/exporter-core:
+    dependencies:
+      '@effectforge/core':
+        specifier: workspace:*
+        version: link:../core
+      '@effectforge/schema':
+        specifier: workspace:*
+        version: link:../schema
+      fflate:
+        specifier: ^0.8.2
+        version: 0.8.3
     devDependencies:
       vitest:
         specifier: ^3.2.4
@@ -260,6 +282,19 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
 
+  packages/runtime:
+    dependencies:
+      '@effectforge/renderer-three':
+        specifier: workspace:*
+        version: link:../renderer-three
+      '@effectforge/schema':
+        specifier: workspace:*
+        version: link:../schema
+    devDependencies:
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+
   packages/schema:
     dependencies:
       zod:
@@ -278,6 +313,15 @@ importers:
       '@effectforge/particles':
         specifier: workspace:*
         version: link:../../packages/particles
+
+  tooling/export-validation:
+    dependencies:
+      '@effectforge/exporter-core':
+        specifier: workspace:*
+        version: link:../../packages/exporter-core
+      '@effectforge/presets':
+        specifier: workspace:*
+        version: link:../../packages/presets
 
   tooling/license-audit: {}
 

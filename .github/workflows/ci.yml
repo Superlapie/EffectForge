@@ -41,3 +41,6 @@ jobs:
 
       - name: License audit
         run: pnpm license:audit
+
+      - name: Validate exports
+        run: pnpm validate:exports

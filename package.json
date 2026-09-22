@@ -19,6 +19,7 @@
     "test:unit": "turbo run test",
     "license:audit": "pnpm --filter @effectforge/license-audit run audit",
     "bench:particles": "pnpm --filter @effectforge/benchmarks run bench:particles",
+    "validate:exports": "pnpm --filter @effectforge/export-validation run validate",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
