@@ -72,9 +72,11 @@ function audit() {
       cwd: root,
       encoding: "utf-8",
       stdio: ["pipe", "pipe", "pipe"],
+      maxBuffer: 50 * 1024 * 1024,
     });
   } catch (error) {
-    console.error("Failed to run pnpm list. Run pnpm install first.");
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`Failed to run pnpm list: ${message}`);
     process.exit(1);
   }
 
