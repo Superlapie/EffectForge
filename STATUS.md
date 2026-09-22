@@ -1,6 +1,6 @@
 # EffectForge Status
 
-Last updated: Phase 2 complete
+Last updated: Phase 3 complete
 
 ## What currently works
 
@@ -8,7 +8,8 @@ Last updated: Phase 2 complete
 - **CI pipeline** — Format check, lint, typecheck, unit tests, build, license audit
 - **@effectforge/schema** — Full Zod 4 project schema with layer discriminated unions, curves, gradients, value sources, assets
 - **@effectforge/core** — Project creation, validation, migration framework, diagnostics, deterministic PRNG (Mulberry32)
-- **@effectforge/renderer** — Renderer interface contract (types only)
+- **@effectforge/renderer** — Renderer interface contract
+- **@effectforge/renderer-three** — Three.js WebGL2 renderer with lifecycle, fixed-timestep clock, capture, stats
 - **@effectforge/commands** — Command engine with Zod validation, executor, Immer patch history, undo/redo, transactions
 - **@effectforge/web** — Next.js 16 landing page, docs placeholder, editor placeholder route
 - **@effectforge/cli** — `inspect`, `create`, `validate` commands
@@ -22,7 +23,6 @@ Last updated: Phase 2 complete
 
 ## What is not implemented
 
-- Three.js renderer (Phase 3)
 - Particle engine (Phase 4–5)
 - Pointer interaction (Phase 6)
 - Editor UI (Phase 7)
@@ -31,7 +31,7 @@ Last updated: Phase 2 complete
 
 ## What is being worked on next
 
-**Phase 3: Renderer Foundation** — ThreeWebGL renderer, lifecycle, clock, capture frame
+**Phase 4: Custom Particle Engine Core** — Typed-array store, emitters, GPU instanced billboards
 
 ## Known regressions
 

@@ -1,0 +1,33 @@
+{
+  "name": "@effectforge/renderer-three",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Three.js WebGL2 implementation of the EffectForge renderer",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@effectforge/renderer": "workspace:*",
+    "@effectforge/schema": "workspace:*",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@effectforge/core": "workspace:*",
+    "@types/three": "^0.180.0",
+    "vitest": "^3.2.4"
+  }
+}

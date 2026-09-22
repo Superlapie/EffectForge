@@ -51,4 +51,5 @@ export interface EffectForgeRenderer {
   dispose(): void;
 }
 
-export const RENDERER_PHASE = 3 as const;
+/** Renderer interface stabilized in Phase 3; implementation in @effectforge/renderer-three. */
+export const RENDERER_INTERFACE_VERSION = 1 as const;

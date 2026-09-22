@@ -38,11 +38,11 @@ Features are marked complete only when implementation works, tests exist, and in
 
 ## Phase 3: Renderer Foundation
 
-- [ ] ThreeWebGL renderer
-- [ ] Lifecycle, resize, clock
-- [ ] Deterministic stepping
-- [ ] Capture frame, stats, cleanup
-- [ ] Tests
+- [x] ThreeWebGL renderer
+- [x] Lifecycle, resize, clock
+- [x] Deterministic stepping
+- [x] Capture frame, stats, cleanup
+- [x] Tests
 
 ## Phase 4: Custom Particle Engine Core
 
