@@ -1,0 +1,31 @@
+{
+  "name": "@effectforge/editor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "EffectForge editor state, commands, and keyboard shortcuts",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@effectforge/commands": "workspace:*",
+    "@effectforge/core": "workspace:*",
+    "@effectforge/schema": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.4"
+  }
+}

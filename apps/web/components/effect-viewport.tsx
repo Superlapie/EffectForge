@@ -1,18 +1,45 @@
 "use client";
 
 import { createProjectFromPreset, listPresets, type PresetId } from "@effectforge/presets";
+import type { EffectForgeProject } from "@effectforge/schema";
 import { createThreeWebGLRenderer } from "@effectforge/renderer-three";
 import { useEffect, useRef, useState } from "react";
 
-interface EffectViewportProps {
-  presetId: PresetId;
+interface EffectViewportBaseProps {
   className?: string;
 }
 
-export function EffectViewport({ presetId, className }: EffectViewportProps) {
+interface PresetViewportProps extends EffectViewportBaseProps {
+  presetId: PresetId;
+  project?: never;
+  revision?: never;
+  playing?: never;
+  currentTime?: never;
+  onTimeUpdate?: never;
+}
+
+interface ProjectViewportProps extends EffectViewportBaseProps {
+  project: EffectForgeProject;
+  revision: number;
+  playing: boolean;
+  currentTime: number;
+  onTimeUpdate?: (time: number) => void;
+  presetId?: never;
+}
+
+export type EffectViewportProps = PresetViewportProps | ProjectViewportProps;
+
+export function EffectViewport(props: EffectViewportProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const rendererRef = useRef<ReturnType<typeof createThreeWebGLRenderer> | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [ready, setReady] = useState(false);
+
+  const isProjectMode = "project" in props && props.project !== undefined;
+  const project = isProjectMode ? props.project : undefined;
+  const revision = isProjectMode ? props.revision : 0;
+  const presetId = !isProjectMode ? props.presetId : undefined;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -23,7 +50,9 @@ export function EffectViewport({ presetId, className }: EffectViewportProps) {
 
     let disposed = false;
     let frameId = 0;
+    let cleanupListeners: (() => void) | undefined;
     const renderer = createThreeWebGLRenderer();
+    rendererRef.current = renderer;
 
     const resize = () => {
       const rect = container.getBoundingClientRect();
@@ -36,10 +65,13 @@ export function EffectViewport({ presetId, className }: EffectViewportProps) {
     const boot = async () => {
       try {
         await renderer.initialize({ canvas });
-        const project = createProjectFromPreset(presetId);
-        await renderer.loadProject(project);
+        const initialProject = isProjectMode
+          ? project!
+          : createProjectFromPreset(presetId!);
+        await renderer.loadProject(initialProject);
         resize();
         renderer.play();
+        setReady(true);
 
         const renderFrame = () => {
           if (disposed) {
@@ -81,18 +113,78 @@ export function EffectViewport({ presetId, className }: EffectViewportProps) {
       }
     };
 
-    let cleanupListeners: (() => void) | undefined;
     void boot().then((cleanup) => {
       cleanupListeners = cleanup;
     });
 
     return () => {
       disposed = true;
+      setReady(false);
       window.cancelAnimationFrame(frameId);
       cleanupListeners?.();
       renderer.dispose();
+      rendererRef.current = null;
     };
-  }, [presetId]);
+  }, [isProjectMode, presetId]);
+
+  useEffect(() => {
+    if (!isProjectMode || !ready) {
+      return;
+    }
+    const renderer = rendererRef.current;
+    if (!renderer || !project) {
+      return;
+    }
+    void renderer.loadProject(project);
+  }, [isProjectMode, project, revision, ready]);
+
+  useEffect(() => {
+    if (!isProjectMode || !ready) {
+      return;
+    }
+    const renderer = rendererRef.current;
+    if (!renderer) {
+      return;
+    }
+    if (props.playing) {
+      renderer.play();
+    } else {
+      renderer.pause();
+    }
+  }, [isProjectMode, props.playing, ready]);
+
+  useEffect(() => {
+    if (!isProjectMode || !ready) {
+      return;
+    }
+    const renderer = rendererRef.current;
+    if (!renderer) {
+      return;
+    }
+    const delta = Math.abs(renderer.getSimulationTime() - props.currentTime);
+    if (!props.playing || delta > 0.05) {
+      renderer.seek(props.currentTime);
+    }
+  }, [isProjectMode, props.currentTime, props.playing, ready]);
+
+  useEffect(() => {
+    if (!isProjectMode || !ready || !props.onTimeUpdate || !props.playing) {
+      return;
+    }
+    const renderer = rendererRef.current;
+    if (!renderer) {
+      return;
+    }
+
+    let frameId = 0;
+    const tick = () => {
+      props.onTimeUpdate?.(renderer.getSimulationTime());
+      frameId = window.requestAnimationFrame(tick);
+    };
+    frameId = window.requestAnimationFrame(tick);
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [isProjectMode, props.onTimeUpdate, props.playing, ready]);
 
   if (error) {
     return (
@@ -101,7 +193,7 @@ export function EffectViewport({ presetId, className }: EffectViewportProps) {
   }
 
   return (
-    <div ref={containerRef} className={className}>
+    <div ref={containerRef} className={props.className}>
       <canvas ref={canvasRef} className="h-full w-full touch-none" />
     </div>
   );

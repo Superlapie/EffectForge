@@ -42,7 +42,8 @@ cli, mcp ------ core / commands / exporters
 - **@effectforge/pointer** — Normalized pointer input service
 - **@effectforge/presets** — Production effect presets
 - **@effectforge/commands** — Command validation, execution, undo/redo, transactions
-- **@effectforge/web** — Next.js 16 landing page and editor placeholder
+- **@effectforge/editor** — EditorController, selection, playback, keyboard shortcuts
+- **@effectforge/web** — Next.js 16 landing page and web editor at `/editor`
 - **@effectforge/cli** — Minimal validate/create/inspect commands
 
 ### Planned

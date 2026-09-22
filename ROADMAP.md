@@ -67,10 +67,10 @@ Features are marked complete only when implementation works, tests exist, and in
 
 ## Phase 7: Editor Foundation
 
-- [ ] Shared editor package
-- [ ] Layer panel, viewport, inspector, timeline
-- [ ] Undo/redo, keyboard shortcuts
-- [ ] Usable web application
+- [x] Shared editor package
+- [x] Layer panel, viewport, inspector, timeline
+- [x] Undo/redo, keyboard shortcuts
+- [x] Usable web application
 
 ## Phase 8–29
 

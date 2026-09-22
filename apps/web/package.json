@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@effectforge/core": "workspace:*",
+    "@effectforge/editor": "workspace:*",
     "@effectforge/presets": "workspace:*",
     "@effectforge/renderer-three": "workspace:*",
     "@effectforge/schema": "workspace:*",

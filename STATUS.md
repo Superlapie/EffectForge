@@ -1,6 +1,6 @@
 # EffectForge Status
 
-Last updated: Phase 6 complete
+Last updated: Phase 7 complete
 
 ## What currently works
 
@@ -14,25 +14,25 @@ Last updated: Phase 6 complete
 - **@effectforge/pointer** — Normalized pointer service with client-to-world coordinate mapping
 - **@effectforge/presets** — Production presets (cursor attract, repel, click burst)
 - **@effectforge/commands** — Command engine with Zod validation, executor, Immer patch history, undo/redo, transactions
-- **@effectforge/web** — Next.js 16 landing page, docs placeholder, editor placeholder route
+- **@effectforge/editor** — EditorController, playback state, keyboard shortcuts, layer/project mutations
+- **@effectforge/web** — Next.js 16 landing page and full web editor at `/editor`
 - **@effectforge/cli** — `inspect`, `create`, `validate` commands
 - **License audit tooling** — Automated dependency license check
 
 ## What is partially implemented
 
-- **Web editor** — Route exists; full editor UI is Phase 7
 - **CLI** — Only basic validate/create/inspect; full commands in Phase 19
 - **Desktop / MCP apps** — Package stubs only
+- **Inspector** — Particle layers only; other layer kinds and advanced curves in later phases
 
 ## What is not implemented
 
-- Editor UI (Phase 7)
 - Project persistence / `.effectforge` archives (Phase 8)
-- Presets, exporters, post-processing, trails, and all later phases
+- Preset export, post-processing, trails, and all later phases
 
 ## What is being worked on next
 
-**Phase 7: Editor Foundation** — Layer panel, viewport, inspector, timeline, undo/redo
+**Phase 8: Project Persistence** — Save/load `.effectforge` archives
 
 ## Known regressions
 
