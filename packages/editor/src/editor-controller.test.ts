@@ -58,6 +58,7 @@ describe("EditorController", () => {
 
   it("reloads project and resets playback", () => {
     const controller = createEditorController(createProject({ name: "A" }));
+    const initialLoadRevision = controller.getState().loadRevision;
     controller.setProjectName("B");
     controller.setCurrentTime(1);
     controller.setPlaying(false);
@@ -68,5 +69,6 @@ describe("EditorController", () => {
     expect(state.playback.playing).toBe(true);
     expect(state.playback.currentTime).toBe(0);
     expect(state.canUndo).toBe(false);
+    expect(state.loadRevision).toBe(initialLoadRevision + 1);
   });
 });

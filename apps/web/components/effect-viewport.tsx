@@ -21,6 +21,7 @@ interface PresetViewportProps extends EffectViewportBaseProps {
 interface ProjectViewportProps extends EffectViewportBaseProps {
   project: EffectForgeProject;
   projectRevision: number;
+  loadRevision: number;
   playing: boolean;
   currentTime: number;
   onTimeUpdate?: (time: number) => void;
@@ -39,7 +40,9 @@ export function EffectViewport(props: EffectViewportProps) {
   const isProjectMode = "project" in props && props.project !== undefined;
   const project = isProjectMode ? props.project : undefined;
   const projectRevision = isProjectMode ? props.projectRevision : 0;
+  const loadRevision = isProjectMode ? props.loadRevision : 0;
   const presetId = !isProjectMode ? props.presetId : undefined;
+  const lastLoadRevisionRef = useRef(loadRevision);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -135,8 +138,15 @@ export function EffectViewport(props: EffectViewportProps) {
     if (!renderer || !project) {
       return;
     }
+
+    if (loadRevision !== lastLoadRevisionRef.current) {
+      lastLoadRevisionRef.current = loadRevision;
+      void renderer.loadProject(project);
+      return;
+    }
+
     void renderer.updateProject(project);
-  }, [isProjectMode, project, projectRevision, ready]);
+  }, [isProjectMode, loadRevision, project, projectRevision, ready]);
 
   useEffect(() => {
     if (!isProjectMode || !ready) {

@@ -11,22 +11,30 @@ import { useEditorState } from "./use-editor-controller";
 
 interface EditorToolbarProps {
   controller: EditorController;
+  initialPresetId?: string;
 }
 
-export function EditorToolbar({ controller }: EditorToolbarProps) {
+export function EditorToolbar({ controller, initialPresetId = "cursor-attract-sparkles" }: EditorToolbarProps) {
   const state = useEditorState(controller);
   const projectInputRef = useRef<HTMLInputElement>(null);
   const presetInputRef = useRef<HTMLInputElement>(null);
   const [ioError, setIoError] = useState<string | null>(null);
   const [presetVersion, setPresetVersion] = useState(0);
+  const [activePresetId, setActivePresetId] = useState(initialPresetId);
   const presets = listAllPresets();
 
   const loadPreset = (presetId: string) => {
-    const preset = findPreset(presetId);
-    if (preset) {
-      controller.loadProject(preset.create());
-      setIoError(null);
+    if (!presetId) {
+      return;
     }
+    const preset = findPreset(presetId);
+    if (!preset) {
+      setIoError(`Unknown preset: ${presetId}`);
+      return;
+    }
+    controller.loadProject(preset.create());
+    setActivePresetId(presetId);
+    setIoError(null);
   };
 
   const handleOpenProject = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +44,9 @@ export function EditorToolbar({ controller }: EditorToolbarProps) {
       return;
     }
     const error = await openProjectArchive(controller, file);
+    if (!error) {
+      setActivePresetId("");
+    }
     setIoError(error);
   };
 
@@ -135,12 +146,12 @@ export function EditorToolbar({ controller }: EditorToolbarProps) {
         </div>
         <select
           key={presetVersion}
+          value={activePresetId}
           onChange={(event) => loadPreset(event.target.value)}
           className="rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-xs text-text-secondary"
-          defaultValue=""
           aria-label="Load preset"
         >
-          <option value="" disabled>Load preset…</option>
+          <option value="">Custom project</option>
           {presets.map((preset) => (
             <option key={preset.id} value={preset.id}>{preset.name}</option>
           ))}

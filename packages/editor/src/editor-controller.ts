@@ -8,6 +8,7 @@ export class EditorController {
   private selectedLayerId: string | null;
   private playback: EditorPlaybackState = { playing: true, currentTime: 0 };
   private projectRevision = 0;
+  private loadRevision = 0;
   private readonly listeners = new Set<() => void>();
 
   constructor(project: EffectForgeProject) {
@@ -28,6 +29,7 @@ export class EditorController {
       canUndo: this.session.canUndo(),
       canRedo: this.session.canRedo(),
       projectRevision: this.projectRevision,
+      loadRevision: this.loadRevision,
     };
   }
 
@@ -182,6 +184,7 @@ export class EditorController {
     this.session = new CommandSession(project);
     this.selectedLayerId = project.layers[0]?.id ?? null;
     this.playback = { playing: true, currentTime: 0 };
+    this.loadRevision += 1;
     this.emitProjectChange();
   }
 

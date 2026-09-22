@@ -55,6 +55,7 @@ export function EditorWorkspace() {
           <EffectViewport
             project={state.project}
             projectRevision={state.projectRevision}
+            loadRevision={state.loadRevision}
             playing={state.playback.playing}
             currentTime={state.playback.currentTime}
             onTimeUpdate={(time) => {
