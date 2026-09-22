@@ -3,12 +3,14 @@ import { createClickBurstStars } from "./definitions/click-burst-stars.js";
 import { createCursorAttractSparkles } from "./definitions/cursor-attract-sparkles.js";
 import { createCursorRepelMist } from "./definitions/cursor-repel-mist.js";
 import { createCursorTrailGlow } from "./definitions/cursor-trail-glow.js";
+import { createSparklesBloom } from "./definitions/sparkles-bloom.js";
 
 export type BuiltinPresetId =
   | "cursor-attract-sparkles"
   | "cursor-repel-mist"
   | "click-burst-stars"
-  | "cursor-trail-glow";
+  | "cursor-trail-glow"
+  | "sparkles-bloom";
 
 export interface EffectPreset {
   id: string;
@@ -24,6 +26,7 @@ export const BUILTIN_PRESET_PROJECT_IDS: Record<string, BuiltinPresetId> = {
   proj_cursor_repel_mist: "cursor-repel-mist",
   proj_click_burst_stars: "click-burst-stars",
   proj_cursor_trail_glow: "cursor-trail-glow",
+  proj_sparkles_bloom: "sparkles-bloom",
 };
 
 export function findBuiltinPresetIdForProject(projectId: string): BuiltinPresetId | undefined {
@@ -58,5 +61,12 @@ export const BUILTIN_PRESETS: EffectPreset[] = [
     description: "Smooth additive ribbon that follows the pointer with a cyan glow.",
     tags: ["pointer", "trail", "glow"],
     create: createCursorTrailGlow,
+  },
+  {
+    id: "sparkles-bloom",
+    name: "Sparkles + Bloom",
+    description: "Cursor-attract sparkles with a cinematic bloom post-processing pass.",
+    tags: ["pointer", "sparkles", "bloom", "postfx"],
+    create: createSparklesBloom,
   },
 ];

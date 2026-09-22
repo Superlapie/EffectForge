@@ -104,6 +104,32 @@ export function createDefaultTrailLayer(
   };
 }
 
+export type DefaultPostFxEffect = "bloom" | "vignette" | "chromatic-aberration";
+
+/** Create a default post-processing layer for quick authoring. */
+export function createDefaultPostFxLayer(
+  name = "Bloom",
+  effect: DefaultPostFxEffect = "bloom",
+): Layer {
+  const effectConfig =
+    effect === "bloom"
+      ? { type: "bloom" as const, intensity: 0.7, threshold: 0.75 }
+      : effect === "vignette"
+        ? { type: "vignette" as const, darkness: 0.45, offset: 0.5 }
+        : { type: "chromatic-aberration" as const, offset: 0.002 };
+
+  return {
+    id: generateUniqueId("layer_"),
+    name,
+    kind: "postfx",
+    enabled: true,
+    locked: false,
+    opacity: 1,
+    blendMode: "normal",
+    effect: effectConfig,
+  };
+}
+
 /** Create a default particle layer for quick authoring. */
 export function createDefaultParticleLayer(name = "Particles"): Layer {
   return {

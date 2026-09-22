@@ -1,7 +1,12 @@
 "use client";
 
 import { getSelectedLayer, type EditorController } from "@effectforge/editor";
-import type { NumericValueSource, ParticleLayer, TrailLayer } from "@effectforge/schema";
+import type {
+  NumericValueSource,
+  ParticleLayer,
+  PostFxLayer,
+  TrailLayer,
+} from "@effectforge/schema";
 import { useEditorState } from "./use-editor-controller";
 
 interface LayerInspectorProps {
@@ -16,6 +21,17 @@ export function LayerInspector({ controller }: LayerInspectorProps) {
     return (
       <aside className="w-full border-t border-border-subtle p-4 lg:w-72 lg:border-l lg:border-t-0">
         <p className="text-sm text-text-muted">Select a layer to inspect its properties.</p>
+      </aside>
+    );
+  }
+
+  if (layer.kind === "postfx") {
+    return (
+      <aside className="flex w-full flex-col border-t border-border-subtle lg:w-72 lg:border-l lg:border-t-0">
+        <div className="border-b border-border-subtle px-4 py-2">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Inspector</h2>
+        </div>
+        <PostFxInspector controller={controller} layer={layer} />
       </aside>
     );
   }
@@ -49,6 +65,91 @@ export function LayerInspector({ controller }: LayerInspectorProps) {
       </div>
       <ParticleInspector controller={controller} layer={layer} />
     </aside>
+  );
+}
+
+function PostFxInspector({
+  controller,
+  layer,
+}: {
+  controller: EditorController;
+  layer: PostFxLayer;
+}) {
+  return (
+    <div className="space-y-4 overflow-y-auto p-4">
+      <Field label="Name">
+        <input
+          type="text"
+          value={layer.name}
+          onChange={(event) => controller.setLayerName(layer.id, event.target.value)}
+          className="w-full rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-sm"
+        />
+      </Field>
+
+      <SliderField
+        label="Opacity"
+        value={layer.opacity}
+        min={0}
+        max={1}
+        step={0.01}
+        onChange={(value) => controller.setLayerOpacity(layer.id, value)}
+      />
+
+      {layer.effect.type === "bloom" ? (
+        <>
+          <SliderField
+            label="Intensity"
+            value={layer.effect.intensity}
+            min={0}
+            max={2}
+            step={0.05}
+            onChange={(value) => controller.setPostFxEffectProperty(layer.id, "intensity", value)}
+          />
+          <SliderField
+            label="Threshold"
+            value={layer.effect.threshold}
+            min={0}
+            max={1}
+            step={0.01}
+            onChange={(value) => controller.setPostFxEffectProperty(layer.id, "threshold", value)}
+          />
+        </>
+      ) : null}
+
+      {layer.effect.type === "vignette" ? (
+        <>
+          <SliderField
+            label="Darkness"
+            value={layer.effect.darkness}
+            min={0}
+            max={1}
+            step={0.01}
+            onChange={(value) => controller.setPostFxEffectProperty(layer.id, "darkness", value)}
+          />
+          <SliderField
+            label="Offset"
+            value={layer.effect.offset}
+            min={0}
+            max={1}
+            step={0.01}
+            onChange={(value) => controller.setPostFxEffectProperty(layer.id, "offset", value)}
+          />
+        </>
+      ) : null}
+
+      {layer.effect.type === "chromatic-aberration" ? (
+        <SliderField
+          label="Offset"
+          value={layer.effect.offset}
+          min={0}
+          max={0.02}
+          step={0.0005}
+          onChange={(value) => controller.setPostFxEffectProperty(layer.id, "offset", value)}
+        />
+      ) : null}
+
+      <p className="text-xs text-text-muted">Effect: {layer.effect.type}</p>
+    </div>
   );
 }
 

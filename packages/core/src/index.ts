@@ -26,6 +26,8 @@ export {
   createProject,
   createDefaultParticleLayer,
   createDefaultTrailLayer,
+  createDefaultPostFxLayer,
   type CreateProjectOptions,
   type CreateDefaultTrailLayerOptions,
+  type DefaultPostFxEffect,
 } from "./create-project.js";

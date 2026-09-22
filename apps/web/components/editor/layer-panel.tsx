@@ -31,6 +31,13 @@ export function LayerPanel({ controller }: LayerPanelProps) {
           >
             + Trail
           </button>
+          <button
+            type="button"
+            onClick={() => controller.addPostFxLayer("bloom")}
+            className="rounded border border-border-subtle px-2 py-0.5 text-xs text-text-secondary hover:border-accent hover:text-text-primary"
+          >
+            + Bloom
+          </button>
         </div>
       </div>
 

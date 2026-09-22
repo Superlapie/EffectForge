@@ -101,6 +101,14 @@ Features are marked complete only when implementation works, tests exist, and in
 - [x] `cursor-trail-glow` preset
 - [x] Unit and renderer integration tests
 
-## Phase 12–29
+## Phase 12: Post-Processing Layers
+
+- [x] `@effectforge/postfx` layer resolution
+- [x] `PostFxPipeline` render-target pass chain in `renderer-three`
+- [x] Bloom, vignette, chromatic aberration, noise, glitch, pixelation, shockwave shaders
+- [x] `createDefaultPostFxLayer()` and editor bloom inspector
+- [x] `sparkles-bloom` preset
+
+## Phase 13–29
 
 See master specification for remaining phases. Each will be checked off as completed.

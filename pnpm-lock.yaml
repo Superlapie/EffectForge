@@ -206,6 +206,16 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
 
+  packages/postfx:
+    dependencies:
+      '@effectforge/schema':
+        specifier: workspace:*
+        version: link:../schema
+    devDependencies:
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+
   packages/presets:
     dependencies:
       '@effectforge/core':
@@ -262,6 +272,9 @@ importers:
       '@effectforge/pointer':
         specifier: workspace:*
         version: link:../pointer
+      '@effectforge/postfx':
+        specifier: workspace:*
+        version: link:../postfx
       '@effectforge/renderer':
         specifier: workspace:*
         version: link:../renderer

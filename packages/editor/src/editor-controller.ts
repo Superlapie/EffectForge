@@ -1,5 +1,10 @@
 import { CommandSession } from "@effectforge/commands";
-import { createDefaultParticleLayer, createDefaultTrailLayer } from "@effectforge/core";
+import {
+  createDefaultParticleLayer,
+  createDefaultPostFxLayer,
+  createDefaultTrailLayer,
+  type DefaultPostFxEffect,
+} from "@effectforge/core";
 import type { EffectForgeProject, Layer } from "@effectforge/schema";
 import type { EditorPlaybackState, EditorState } from "./editor-state.js";
 
@@ -107,6 +112,27 @@ export class EditorController {
     this.execute({ type: "AddLayer", payload: { layer } });
     this.selectedLayerId = layer.id;
     this.emit();
+  }
+
+  addPostFxLayer(effect: DefaultPostFxEffect = "bloom"): void {
+    const layer = createDefaultPostFxLayer(
+      effect === "bloom" ? "Bloom" : effect === "vignette" ? "Vignette" : "Chromatic",
+      effect,
+    );
+    this.execute({ type: "AddLayer", payload: { layer } });
+    this.selectedLayerId = layer.id;
+    this.emit();
+  }
+
+  setPostFxEffectProperty(
+    layerId: string,
+    path: string,
+    value: number,
+  ): void {
+    this.execute({
+      type: "SetLayerProperty",
+      payload: { layerId, path: `effect.${path}`, value },
+    });
   }
 
   setTrailWidth(layerId: string, width: number): void {

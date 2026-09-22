@@ -14,9 +14,11 @@ import {
   ShaderMaterial,
   WebGLRenderer,
 } from "three";
+import { resolvePostFxLayers } from "@effectforge/postfx";
 import { PointerService } from "@effectforge/pointer";
 import { SimulationClock } from "./clock.js";
 import { ParticleScene } from "./particle-scene.js";
+import { PostFxPipeline } from "./postfx-pipeline.js";
 import { TrailScene } from "./trail-scene.js";
 import { applyCanvasBackground } from "./scene-background.js";
 import { StatsTracker } from "./stats-tracker.js";
@@ -68,6 +70,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
   private testQuad: Mesh | null = null;
   private particleScene: ParticleScene | null = null;
   private trailScene: TrailScene | null = null;
+  private postFxPipeline: PostFxPipeline | null = null;
   private project: EffectForgeProject | null = null;
 
   private width = 1;
@@ -139,6 +142,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     applyCanvasBackground(this.scene!, project.canvas.background);
     this.particleScene = new ParticleScene(project, this.scene!, this.pointer);
     this.trailScene = new TrailScene(project, this.scene!, this.pointer);
+    this.syncPostFxPipeline(project);
     this.setTestQuadVisible(this.getEffectLayerCount() === 0);
     this.resize(project.canvas.width, project.canvas.height, this.dpr);
   }
@@ -148,6 +152,8 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     this.assertInitialized();
     this.project = project;
     applyCanvasBackground(this.scene!, project.canvas.background);
+
+    this.syncPostFxPipeline(project);
 
     const particlesSynced = this.particleScene?.syncProjectLayers(project) ?? true;
     const trailsSynced = this.trailScene?.syncProjectLayers(project) ?? true;
@@ -172,6 +178,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     const pixelWidth = Math.round(this.width * this.dpr);
     const pixelHeight = Math.round(this.height * this.dpr);
     this.webgl!.setSize(pixelWidth, pixelHeight, false);
+    this.postFxPipeline?.setSize(pixelWidth, pixelHeight);
 
     const aspect = this.width / this.height;
     const halfHeight = 1;
@@ -228,9 +235,23 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     this.particleScene?.syncMeshes();
     this.trailScene?.syncMeshes();
     this.updateTestQuadUniforms();
-    this.webgl!.render(this.scene!, this.camera!);
+
+    const renderScene = () => {
+      this.webgl!.render(this.scene!, this.camera!);
+    };
+
+    if (this.postFxPipeline && this.postFxPipeline.activeLayerCount > 0) {
+      this.postFxPipeline.render(this.webgl!, renderScene, this.clock.getTime());
+    } else {
+      renderScene();
+    }
+
     const drawCalls = this.webgl!.info.render.calls;
-    const batchCount = 1 + (this.particleScene?.layerCount ?? 0) + (this.trailScene?.layerCount ?? 0);
+    const batchCount =
+      1 +
+      (this.particleScene?.layerCount ?? 0) +
+      (this.trailScene?.layerCount ?? 0) +
+      (this.postFxPipeline?.activeLayerCount ?? 0);
     this.stats.setRenderInfo(drawCalls, batchCount);
     this.stats.setParticleCount(this.particleScene?.totalActiveParticles ?? 0);
   }
@@ -278,6 +299,8 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     }
 
     this.clearEffectScenes();
+    this.postFxPipeline?.dispose();
+    this.postFxPipeline = null;
     this.testQuad?.geometry.dispose();
     const material = this.testQuad?.material;
     if (material instanceof ShaderMaterial) {
@@ -347,6 +370,16 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
 
   private getEffectLayerCount(): number {
     return (this.particleScene?.layerCount ?? 0) + (this.trailScene?.layerCount ?? 0);
+  }
+
+  private syncPostFxPipeline(project: EffectForgeProject): void {
+    const layers = resolvePostFxLayers(project);
+    if (!this.postFxPipeline) {
+      const pixelWidth = Math.round(this.width * this.dpr);
+      const pixelHeight = Math.round(this.height * this.dpr);
+      this.postFxPipeline = new PostFxPipeline(pixelWidth, pixelHeight);
+    }
+    this.postFxPipeline.setLayers(layers);
   }
 
   private clearEffectScenes(): void {
