@@ -1,7 +1,7 @@
 "use client";
 
 import type { EditorController } from "@effectforge/editor";
-import { findPreset, listAllPresets } from "@effectforge/presets";
+import { findBuiltinPresetIdForProject, findPreset, listAllPresets } from "@effectforge/presets";
 import { useRef, useState } from "react";
 import type { ExportTarget } from "@effectforge/exporter-core";
 import { downloadExportedCode } from "./export-code";
@@ -11,17 +11,18 @@ import { useEditorState } from "./use-editor-controller";
 
 interface EditorToolbarProps {
   controller: EditorController;
-  initialPresetId?: string;
 }
 
-export function EditorToolbar({ controller, initialPresetId = "cursor-attract-sparkles" }: EditorToolbarProps) {
+export function EditorToolbar({ controller }: EditorToolbarProps) {
   const state = useEditorState(controller);
   const projectInputRef = useRef<HTMLInputElement>(null);
   const presetInputRef = useRef<HTMLInputElement>(null);
   const [ioError, setIoError] = useState<string | null>(null);
   const [presetVersion, setPresetVersion] = useState(0);
-  const [activePresetId, setActivePresetId] = useState(initialPresetId);
+  const [customProjectSelected, setCustomProjectSelected] = useState(false);
   const presets = listAllPresets();
+  const selectedPresetId =
+    customProjectSelected ? "" : (findBuiltinPresetIdForProject(state.project.id) ?? "");
 
   const loadPreset = (presetId: string) => {
     if (!presetId) {
@@ -32,8 +33,8 @@ export function EditorToolbar({ controller, initialPresetId = "cursor-attract-sp
       setIoError(`Unknown preset: ${presetId}`);
       return;
     }
+    setCustomProjectSelected(false);
     controller.loadProject(preset.create());
-    setActivePresetId(presetId);
     setIoError(null);
   };
 
@@ -45,7 +46,7 @@ export function EditorToolbar({ controller, initialPresetId = "cursor-attract-sp
     }
     const error = await openProjectArchive(controller, file);
     if (!error) {
-      setActivePresetId("");
+      setCustomProjectSelected(true);
     }
     setIoError(error);
   };
@@ -146,7 +147,7 @@ export function EditorToolbar({ controller, initialPresetId = "cursor-attract-sp
         </div>
         <select
           key={presetVersion}
-          value={activePresetId}
+          value={selectedPresetId}
           onChange={(event) => loadPreset(event.target.value)}
           className="rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-xs text-text-secondary"
           aria-label="Load preset"

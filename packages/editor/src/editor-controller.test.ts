@@ -56,6 +56,18 @@ describe("EditorController", () => {
     expect(controller.getState().projectRevision).toBe(initialRevision);
   });
 
+  it("returns a stable snapshot until the store emits", () => {
+    const controller = createEditorController(createProject({ name: "Stable" }));
+    const first = controller.getState();
+    const second = controller.getState();
+    expect(first).toBe(second);
+
+    controller.setProjectName("Changed");
+    const third = controller.getState();
+    expect(third).not.toBe(first);
+    expect(third.project.name).toBe("Changed");
+  });
+
   it("reloads project and resets playback", () => {
     const controller = createEditorController(createProject({ name: "A" }));
     const initialLoadRevision = controller.getState().loadRevision;

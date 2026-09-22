@@ -10,10 +10,12 @@ export class EditorController {
   private projectRevision = 0;
   private loadRevision = 0;
   private readonly listeners = new Set<() => void>();
+  private snapshot: EditorState;
 
   constructor(project: EffectForgeProject) {
     this.session = new CommandSession(project);
     this.selectedLayerId = project.layers[0]?.id ?? null;
+    this.snapshot = this.createSnapshot();
   }
 
   subscribe(listener: () => void): () => void {
@@ -22,6 +24,10 @@ export class EditorController {
   }
 
   getState(): EditorState {
+    return this.snapshot;
+  }
+
+  private createSnapshot(): EditorState {
     return {
       project: this.session.getProject(),
       selectedLayerId: this.selectedLayerId,
@@ -211,6 +217,7 @@ export class EditorController {
   }
 
   private emit(): void {
+    this.snapshot = this.createSnapshot();
     for (const listener of this.listeners) {
       listener();
     }

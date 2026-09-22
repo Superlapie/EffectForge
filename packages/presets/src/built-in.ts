@@ -18,6 +18,18 @@ export interface EffectPreset {
   create: (seed?: number) => EffectForgeProject;
 }
 
+/** Maps built-in project IDs to preset IDs for editor UI sync. */
+export const BUILTIN_PRESET_PROJECT_IDS: Record<string, BuiltinPresetId> = {
+  proj_cursor_attract_sparkles: "cursor-attract-sparkles",
+  proj_cursor_repel_mist: "cursor-repel-mist",
+  proj_click_burst_stars: "click-burst-stars",
+  proj_cursor_trail_glow: "cursor-trail-glow",
+};
+
+export function findBuiltinPresetIdForProject(projectId: string): BuiltinPresetId | undefined {
+  return BUILTIN_PRESET_PROJECT_IDS[projectId];
+}
+
 export const BUILTIN_PRESETS: EffectPreset[] = [
   {
     id: "cursor-attract-sparkles",

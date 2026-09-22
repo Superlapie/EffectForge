@@ -1,6 +1,8 @@
 import type { EffectForgeProject } from "@effectforge/schema";
 import {
   BUILTIN_PRESETS,
+  BUILTIN_PRESET_PROJECT_IDS,
+  findBuiltinPresetIdForProject,
   type BuiltinPresetId,
   type EffectPreset,
 } from "./built-in.js";
@@ -9,7 +11,7 @@ import { findPreset, listAllPresets } from "./registry.js";
 export type PresetId = BuiltinPresetId | (string & {});
 
 export type { BuiltinPresetId, EffectPreset };
-export { BUILTIN_PRESETS };
+export { BUILTIN_PRESETS, BUILTIN_PRESET_PROJECT_IDS, findBuiltinPresetIdForProject };
 
 export function listPresets(): EffectPreset[] {
   return BUILTIN_PRESETS;
