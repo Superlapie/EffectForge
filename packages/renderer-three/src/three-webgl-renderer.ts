@@ -12,10 +12,10 @@ import {
   PlaneGeometry,
   Scene,
   ShaderMaterial,
-  Vector2,
   WebGLRenderer,
 } from "three";
 import { SimulationClock } from "./clock.js";
+import { ParticleScene } from "./particle-scene.js";
 import { applyCanvasBackground } from "./scene-background.js";
 import { StatsTracker } from "./stats-tracker.js";
 
@@ -62,6 +62,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
   private scene: Scene | null = null;
   private camera: OrthographicCamera | null = null;
   private testQuad: Mesh | null = null;
+  private particleScene: ParticleScene | null = null;
   private project: EffectForgeProject | null = null;
 
   private width = 1;
@@ -128,8 +129,11 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
 
   async loadProject(project: EffectForgeProject): Promise<void> {
     this.assertInitialized();
+    this.clearParticleScene();
     this.project = project;
     applyCanvasBackground(this.scene!, project.canvas.background);
+    this.particleScene = new ParticleScene(project, this.scene!);
+    this.setTestQuadVisible(this.particleScene.layerCount === 0);
     this.resize(project.canvas.width, project.canvas.height, this.dpr);
   }
 
@@ -164,11 +168,13 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
 
   stop(): void {
     this.clock.stop();
+    this.particleScene?.stop();
     this.updateTestQuadUniforms();
   }
 
   seek(time: number): void {
     this.clock.seek(time);
+    this.particleScene?.seek(time);
     this.updateTestQuadUniforms();
   }
 
@@ -192,10 +198,13 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
       this.stats.recordSimulation(performance.now() - simStart);
     }
 
+    this.particleScene?.syncMeshes();
     this.updateTestQuadUniforms();
     this.webgl!.render(this.scene!, this.camera!);
-    this.stats.setRenderInfo(this.webgl!.info.render.calls, 1);
-    this.stats.setParticleCount(0);
+    const drawCalls = this.webgl!.info.render.calls;
+    const batchCount = 1 + (this.particleScene?.layerCount ?? 0);
+    this.stats.setRenderInfo(drawCalls, batchCount);
+    this.stats.setParticleCount(this.particleScene?.totalActiveParticles ?? 0);
   }
 
   async captureFrame(options: CaptureFrameOptions = {}): Promise<RenderCapture> {
@@ -240,6 +249,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
       return;
     }
 
+    this.clearParticleScene();
     this.testQuad?.geometry.dispose();
     const material = this.testQuad?.material;
     if (material instanceof ShaderMaterial) {
@@ -275,7 +285,21 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
   }
 
   private onSimulationStep(dt: number, time: number): void {
+    this.particleScene?.simulate(dt);
     this.simulationCallback?.(dt, time);
+  }
+
+  private clearParticleScene(): void {
+    if (this.particleScene && this.scene) {
+      this.particleScene.dispose(this.scene);
+      this.particleScene = null;
+    }
+  }
+
+  private setTestQuadVisible(visible: boolean): void {
+    if (this.testQuad) {
+      this.testQuad.visible = visible;
+    }
   }
 
   private updateTestQuadUniforms(): void {

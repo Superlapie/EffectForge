@@ -37,7 +37,8 @@ cli, mcp ------ core / commands / exporters
 - **@effectforge/schema** — Zod 4 schemas for projects, layers, curves, gradients, value sources, assets
 - **@effectforge/core** — Project creation, validation, migration framework, diagnostics, deterministic PRNG
 - **@effectforge/renderer** — Renderer interface contract
-- **@effectforge/renderer-three** — Three.js WebGL2 renderer (lifecycle, clock, capture, stats)
+- **@effectforge/renderer-three** — Three.js WebGL2 renderer (lifecycle, clock, capture, stats, instanced particles)
+- **@effectforge/particles** — Custom particle engine (SoA store, emitters, behaviors)
 - **@effectforge/commands** — Command validation, execution, undo/redo, transactions
 - **@effectforge/web** — Next.js 16 landing page and editor placeholder
 - **@effectforge/cli** — Minimal validate/create/inspect commands

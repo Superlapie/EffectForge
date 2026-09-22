@@ -1,4 +1,4 @@
-# Particle Engine (Planned)
+# Particle Engine
 
 The EffectForge particle engine is implemented independently — not based on three.quarks or any third-party VFX editor.
 
@@ -6,14 +6,27 @@ The EffectForge particle engine is implemented independently — not based on th
 
 - **Structure-of-arrays** — Typed arrays for positions, velocities, ages, colors, etc.
 - **Object pooling** — Free lists; no per-frame particle object allocation
-- **Deterministic PRNG** — All randomness from project seed streams
+- **Deterministic PRNG** — All randomness from project seed streams (`deriveStream`)
 - **GPU instancing** — Instanced billboard rendering with batched draw calls
 - **Schema-driven behaviors** — Composable behavior pipeline defined in Zod schemas
 
-## Implementation phases
+## Package layout
 
-- **Phase 4** — Core store, emitters (point/box/circle), gravity/drag, instanced billboards
-- **Phase 5** — Authoring model: curves, gradients, emission modes, lifetime curves
+| Package | Responsibility |
+|---------|----------------|
+| `@effectforge/particles` | SoA store, emitters, behaviors, `ParticleSystem` simulation |
+| `@effectforge/renderer-three` | `ParticleInstancedMesh`, `ParticleScene` GPU sync |
+
+## Phase 4 (implemented)
+
+- `ParticleStore` — pooled SoA buffers with free list
+- Emitters — `point`, `box`, `circle`
+- Behaviors — `gravity`, `drag`, `constant-acceleration`
+- Value sources — constant and random-range numerics; constant colors
+- `ParticleInstancedMesh` — GPU instanced billboards in Three.js
+- Benchmark — `pnpm bench:particles`
+
+## Upcoming
+
+- **Phase 5** — Curves, gradients, bursts, lifetime curves
 - **Phase 6** — Pointer interaction and first presets
-
-This document will be updated as implementation progresses.

@@ -7,3 +7,5 @@ export {
   type ThreeWebGLRendererOptions,
   type WebGLRendererFactory,
 } from "./three-webgl-renderer.js";
+export { ParticleInstancedMesh } from "./particle-instanced-mesh.js";
+export { ParticleScene } from "./particle-scene.js";

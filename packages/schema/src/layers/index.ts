@@ -1,5 +1,12 @@
 import { z } from "zod";
-import { ParticleLayerSchema, type ParticleLayer } from "./particles.js";
+import {
+  ParticleBehaviorSchema,
+  ParticleEmitterSchema,
+  ParticleLayerSchema,
+  type ParticleBehavior,
+  type ParticleEmitter,
+  type ParticleLayer,
+} from "./particles.js";
 import { TrailLayerSchema, type TrailLayer } from "./trail.js";
 import { DistortionLayerSchema, type DistortionLayer } from "./distortion.js";
 import { TextLayerSchema, type TextLayer } from "./text.js";
@@ -24,6 +31,8 @@ export type Layer = z.infer<typeof LayerSchema>;
 export type LayerKind = Layer["kind"];
 
 export {
+  ParticleBehaviorSchema,
+  ParticleEmitterSchema,
   ParticleLayerSchema,
   TrailLayerSchema,
   DistortionLayerSchema,
@@ -35,6 +44,8 @@ export {
 };
 
 export type {
+  ParticleBehavior,
+  ParticleEmitter,
   ParticleLayer,
   TrailLayer,
   DistortionLayer,

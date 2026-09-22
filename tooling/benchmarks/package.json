@@ -1,0 +1,15 @@
+{
+  "name": "@effectforge/benchmarks",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "EffectForge performance benchmarks",
+  "license": "MIT",
+  "scripts": {
+    "bench:particles": "node src/particle-sim.bench.mjs"
+  },
+  "dependencies": {
+    "@effectforge/core": "workspace:*",
+    "@effectforge/particles": "workspace:*"
+  }
+}

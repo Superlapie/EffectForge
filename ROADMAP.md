@@ -46,12 +46,12 @@ Features are marked complete only when implementation works, tests exist, and in
 
 ## Phase 4: Custom Particle Engine Core
 
-- [ ] Typed-array particle store
-- [ ] Pool/free list
-- [ ] Point, box, circle emitters
-- [ ] Gravity, drag
-- [ ] GPU instanced billboards
-- [ ] Benchmark
+- [x] Typed-array particle store
+- [x] Pool/free list
+- [x] Point, box, circle emitters
+- [x] Gravity, drag
+- [x] GPU instanced billboards
+- [x] Benchmark
 
 ## Phase 5: Particle Authoring Model
 

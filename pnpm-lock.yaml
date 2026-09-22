@@ -128,6 +128,19 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
 
+  packages/particles:
+    dependencies:
+      '@effectforge/core':
+        specifier: workspace:*
+        version: link:../core
+      '@effectforge/schema':
+        specifier: workspace:*
+        version: link:../schema
+    devDependencies:
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+
   packages/renderer:
     dependencies:
       '@effectforge/schema':
@@ -140,6 +153,9 @@ importers:
 
   packages/renderer-three:
     dependencies:
+      '@effectforge/particles':
+        specifier: workspace:*
+        version: link:../particles
       '@effectforge/renderer':
         specifier: workspace:*
         version: link:../renderer
@@ -169,6 +185,15 @@ importers:
       vitest:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+
+  tooling/benchmarks:
+    dependencies:
+      '@effectforge/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@effectforge/particles':
+        specifier: workspace:*
+        version: link:../../packages/particles
 
   tooling/license-audit: {}
 
