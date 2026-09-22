@@ -1,8 +1,8 @@
 # Effect Presets
 
-Production-ready starter projects ship in `@effectforge/presets`.
+Production-ready starter projects ship in `@effectforge/presets`. Custom presets can be exported and shared as `.effectforge-preset` bundles.
 
-## Available presets
+## Built-in presets
 
 | ID | Name | Interaction |
 |----|------|-------------|
@@ -13,10 +13,44 @@ Production-ready starter projects ship in `@effectforge/presets`.
 ## Usage
 
 ```typescript
-import { createProjectFromPreset, listPresets } from "@effectforge/presets";
+import { createProjectFromPreset, listPresets, listAllPresets } from "@effectforge/presets";
 
 const project = createProjectFromPreset("cursor-attract-sparkles");
-const all = listPresets();
+const builtIn = listPresets();
+const withImported = listAllPresets(); // includes session-imported bundles
 ```
 
-Presets return validated `EffectForgeProject` documents compatible with `@effectforge/renderer-three`.
+## Preset bundles (`.effectforge-preset`)
+
+Preset bundles are ZIP archives for sharing reusable effects:
+
+```text
+my-preset.effectforge-preset
+├── preset.json      # id, name, description, tags
+└── project.json     # full EffectForge project
+```
+
+### CLI
+
+```bash
+effectforge preset list
+effectforge preset pack project.json sparkles.effectforge-preset
+effectforge preset unpack sparkles.effectforge-preset ./output
+```
+
+### Library
+
+```typescript
+import { packPresetBundle, unpackPresetBundle, importPresetBundle } from "@effectforge/presets";
+
+const { bytes, manifest } = packPresetBundle(project, {
+  description: "Shareable sparkles",
+  tags: ["pointer"],
+});
+
+const imported = importPresetBundle(bytes); // registers for listAllPresets()
+```
+
+### Web editor
+
+Use **Export preset** to download the current project as a bundle, or **Import preset** to load a bundle into the editor and add it to the preset picker for the session.

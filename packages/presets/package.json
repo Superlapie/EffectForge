@@ -21,10 +21,12 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@effectforge/schema": "workspace:*"
+    "@effectforge/core": "workspace:*",
+    "@effectforge/project-format": "workspace:*",
+    "@effectforge/schema": "workspace:*",
+    "fflate": "^0.8.2"
   },
   "devDependencies": {
-    "@effectforge/core": "workspace:*",
     "vitest": "^3.2.4"
   }
 }

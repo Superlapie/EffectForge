@@ -1,8 +1,9 @@
 "use client";
 
 import type { EditorController } from "@effectforge/editor";
-import { listPresets, type PresetId } from "@effectforge/presets";
+import { findPreset, listAllPresets } from "@effectforge/presets";
 import { useRef, useState } from "react";
+import { exportPresetBundle, importPresetBundleFile } from "./preset-io";
 import { openProjectArchive, saveProjectArchive } from "./project-io";
 import { useEditorState } from "./use-editor-controller";
 
@@ -12,18 +13,21 @@ interface EditorToolbarProps {
 
 export function EditorToolbar({ controller }: EditorToolbarProps) {
   const state = useEditorState(controller);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const projectInputRef = useRef<HTMLInputElement>(null);
+  const presetInputRef = useRef<HTMLInputElement>(null);
   const [ioError, setIoError] = useState<string | null>(null);
+  const [presetVersion, setPresetVersion] = useState(0);
+  const presets = listAllPresets();
 
-  const loadPreset = (presetId: PresetId) => {
-    const preset = listPresets().find((entry) => entry.id === presetId);
+  const loadPreset = (presetId: string) => {
+    const preset = findPreset(presetId);
     if (preset) {
       controller.loadProject(preset.create());
       setIoError(null);
     }
   };
 
-  const handleOpen = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOpenProject = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = "";
     if (!file) {
@@ -33,8 +37,26 @@ export function EditorToolbar({ controller }: EditorToolbarProps) {
     setIoError(error);
   };
 
+  const handleImportPreset = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) {
+      return;
+    }
+    const error = await importPresetBundleFile(controller, file);
+    if (!error) {
+      setPresetVersion((value) => value + 1);
+    }
+    setIoError(error);
+  };
+
   const handleSave = () => {
     saveProjectArchive(controller);
+    setIoError(null);
+  };
+
+  const handleExportPreset = () => {
+    exportPresetBundle(controller);
     setIoError(null);
   };
 
@@ -48,10 +70,10 @@ export function EditorToolbar({ controller }: EditorToolbarProps) {
           className="min-w-0 max-w-xs rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-sm font-medium text-text-primary"
           aria-label="Project name"
         />
-        <div className="flex items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1">
           <button
             type="button"
-            onClick={() => fileInputRef.current?.click()}
+            onClick={() => projectInputRef.current?.click()}
             className="rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-xs text-text-secondary hover:border-border-strong hover:text-text-primary"
           >
             Open
@@ -63,22 +85,44 @@ export function EditorToolbar({ controller }: EditorToolbarProps) {
           >
             Save
           </button>
+          <button
+            type="button"
+            onClick={() => presetInputRef.current?.click()}
+            className="rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-xs text-text-secondary hover:border-border-strong hover:text-text-primary"
+          >
+            Import preset
+          </button>
+          <button
+            type="button"
+            onClick={handleExportPreset}
+            className="rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-xs text-text-secondary hover:border-border-strong hover:text-text-primary"
+          >
+            Export preset
+          </button>
           <input
-            ref={fileInputRef}
+            ref={projectInputRef}
             type="file"
             accept=".effectforge,application/zip"
             className="hidden"
-            onChange={handleOpen}
+            onChange={handleOpenProject}
+          />
+          <input
+            ref={presetInputRef}
+            type="file"
+            accept=".effectforge-preset,application/zip"
+            className="hidden"
+            onChange={handleImportPreset}
           />
         </div>
         <select
-          onChange={(event) => loadPreset(event.target.value as PresetId)}
+          key={presetVersion}
+          onChange={(event) => loadPreset(event.target.value)}
           className="rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-xs text-text-secondary"
           defaultValue=""
           aria-label="Load preset"
         >
           <option value="" disabled>Load preset…</option>
-          {listPresets().map((preset) => (
+          {presets.map((preset) => (
             <option key={preset.id} value={preset.id}>{preset.name}</option>
           ))}
         </select>

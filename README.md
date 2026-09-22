@@ -6,7 +6,7 @@ Visual authoring and compilation environment for creating production-ready inter
 
 ## Status
 
-Early development. Phases 0–6 are complete (monorepo bootstrap through pointer interaction and production presets). See [STATUS.md](./STATUS.md) for current capabilities.
+Early development. Phases 0–9 are complete (monorepo bootstrap through preset export bundles). See [STATUS.md](./STATUS.md) for current capabilities.
 
 ## Development
 

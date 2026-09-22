@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@effectforge/core": "workspace:*",
+    "@effectforge/presets": "workspace:*",
     "@effectforge/project-format": "workspace:*",
     "@effectforge/schema": "workspace:*"
   },

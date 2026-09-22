@@ -79,6 +79,13 @@ Features are marked complete only when implementation works, tests exist, and in
 - [x] CLI `pack` and `unpack` commands
 - [x] Editor open/save integration
 
-## Phase 9–29
+## Phase 9: Preset Export Bundles
+
+- [x] `.effectforge-preset` ZIP bundle format with manifest
+- [x] Pack/unpack and session import registry
+- [x] CLI `preset list`, `preset pack`, `preset unpack`
+- [x] Editor export/import preset integration
+
+## Phase 10–29
 
 See master specification for remaining phases. Each will be checked off as completed.
