@@ -16,13 +16,22 @@ export function LayerPanel({ controller }: LayerPanelProps) {
     <aside className="flex w-full flex-col border-b border-border-subtle lg:w-56 lg:border-b-0 lg:border-r">
       <div className="flex items-center justify-between border-b border-border-subtle px-3 py-2">
         <h2 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Layers</h2>
-        <button
-          type="button"
-          onClick={() => controller.addParticleLayer()}
-          className="rounded border border-border-subtle px-2 py-0.5 text-xs text-text-secondary hover:border-accent hover:text-text-primary"
-        >
-          + Add
-        </button>
+        <div className="flex gap-1">
+          <button
+            type="button"
+            onClick={() => controller.addParticleLayer()}
+            className="rounded border border-border-subtle px-2 py-0.5 text-xs text-text-secondary hover:border-accent hover:text-text-primary"
+          >
+            + Particle
+          </button>
+          <button
+            type="button"
+            onClick={() => controller.addTrailLayer()}
+            className="rounded border border-border-subtle px-2 py-0.5 text-xs text-text-secondary hover:border-accent hover:text-text-primary"
+          >
+            + Trail
+          </button>
+        </div>
       </div>
 
       <ul className="flex-1 overflow-y-auto p-2">

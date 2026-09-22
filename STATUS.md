@@ -1,6 +1,6 @@
 # EffectForge Status
 
-Last updated: Phase 10 complete
+Last updated: Phase 11 complete
 
 ## What currently works
 
@@ -11,8 +11,9 @@ Last updated: Phase 10 complete
 - **@effectforge/renderer** — Renderer interface contract
 - **@effectforge/renderer-three** — Three.js WebGL2 renderer with lifecycle, fixed-timestep clock, capture, stats, instanced particle billboards
 - **@effectforge/particles** — SoA particle store, emitters, behaviors, bursts, curves/gradients, pointer attract/repel, click bursts
+- **@effectforge/trails** — Ring-buffer trail simulation with pointer following
 - **@effectforge/pointer** — Normalized pointer service with client-to-world coordinate mapping
-- **@effectforge/presets** — Built-in presets plus `.effectforge-preset` bundle export/import
+- **@effectforge/presets** — Built-in presets (including cursor trail glow) plus `.effectforge-preset` bundle export/import
 - **@effectforge/runtime** — `mountEffect()` for exported projects (pointer, resize, render loop)
 - **@effectforge/exporter-core** — Vanilla, React+Vite, and Next.js code exporters
 - **@effectforge/commands** — Command engine with Zod validation, executor, Immer patch history, undo/redo, transactions
@@ -31,11 +32,11 @@ Last updated: Phase 10 complete
 
 ## What is not implemented
 
-- Post-processing, trails, and all later phases
+- Post-processing, distortion, text, model layers, and all later phases
 
 ## What is being worked on next
 
-**Phase 11+** — See ROADMAP.md
+**Phase 12+** — See ROADMAP.md
 
 ## Known regressions
 

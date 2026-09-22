@@ -65,6 +65,45 @@ export function createProject(options: CreateProjectOptions = {}): EffectForgePr
   return project;
 }
 
+export interface CreateDefaultTrailLayerOptions {
+  name?: string;
+  minDistance?: number;
+  width?: number;
+  fade?: number;
+}
+
+/** Create a default trail layer for quick authoring. */
+export function createDefaultTrailLayer(
+  name = "Trail",
+  options: CreateDefaultTrailLayerOptions = {},
+): Layer {
+  return {
+    id: generateUniqueId("layer_"),
+    name: options.name ?? name,
+    kind: "trail",
+    enabled: true,
+    locked: false,
+    opacity: 1,
+    blendMode: "additive",
+    maxPoints: 256,
+    width: options.width ?? 6,
+    widthOverLifetime: { type: "linear", start: 1, end: 0.2 },
+    colorGradient: {
+      colorStops: [
+        { position: 0, color: "#44aaff" },
+        { position: 1, color: "#ffffff" },
+      ],
+      alphaStops: [
+        { position: 0, alpha: 0 },
+        { position: 1, alpha: 1 },
+      ],
+    },
+    fade: options.fade ?? 0.85,
+    followPointer: true,
+    minDistance: options.minDistance ?? 0.03,
+  };
+}
+
 /** Create a default particle layer for quick authoring. */
 export function createDefaultParticleLayer(name = "Particles"): Layer {
   return {

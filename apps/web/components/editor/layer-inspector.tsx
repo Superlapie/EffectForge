@@ -1,7 +1,7 @@
 "use client";
 
 import { getSelectedLayer, type EditorController } from "@effectforge/editor";
-import type { NumericValueSource, ParticleLayer } from "@effectforge/schema";
+import type { NumericValueSource, ParticleLayer, TrailLayer } from "@effectforge/schema";
 import { useEditorState } from "./use-editor-controller";
 
 interface LayerInspectorProps {
@@ -16,6 +16,17 @@ export function LayerInspector({ controller }: LayerInspectorProps) {
     return (
       <aside className="w-full border-t border-border-subtle p-4 lg:w-72 lg:border-l lg:border-t-0">
         <p className="text-sm text-text-muted">Select a layer to inspect its properties.</p>
+      </aside>
+    );
+  }
+
+  if (layer.kind === "trail") {
+    return (
+      <aside className="flex w-full flex-col border-t border-border-subtle lg:w-72 lg:border-l lg:border-t-0">
+        <div className="border-b border-border-subtle px-4 py-2">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Inspector</h2>
+        </div>
+        <TrailInspector controller={controller} layer={layer} />
       </aside>
     );
   }
@@ -38,6 +49,68 @@ export function LayerInspector({ controller }: LayerInspectorProps) {
       </div>
       <ParticleInspector controller={controller} layer={layer} />
     </aside>
+  );
+}
+
+function TrailInspector({
+  controller,
+  layer,
+}: {
+  controller: EditorController;
+  layer: TrailLayer;
+}) {
+  return (
+    <div className="space-y-4 overflow-y-auto p-4">
+      <Field label="Name">
+        <input
+          type="text"
+          value={layer.name}
+          onChange={(event) => controller.setLayerName(layer.id, event.target.value)}
+          className="w-full rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-sm"
+        />
+      </Field>
+
+      <SliderField
+        label="Opacity"
+        value={layer.opacity}
+        min={0}
+        max={1}
+        step={0.01}
+        onChange={(value) => controller.setLayerOpacity(layer.id, value)}
+      />
+
+      <SliderField
+        label="Width"
+        value={layer.width}
+        min={1}
+        max={24}
+        step={0.5}
+        onChange={(value) => controller.setTrailWidth(layer.id, value)}
+      />
+
+      <SliderField
+        label="Fade"
+        value={layer.fade}
+        min={0}
+        max={1}
+        step={0.01}
+        onChange={(value) => controller.setTrailFade(layer.id, value)}
+      />
+
+      <SliderField
+        label="Min distance"
+        value={layer.minDistance}
+        min={0.005}
+        max={0.2}
+        step={0.005}
+        onChange={(value) => controller.setTrailMinDistance(layer.id, value)}
+      />
+
+      <p className="text-xs text-text-muted">
+        Blend: {layer.blendMode} · Max points: {layer.maxPoints.toLocaleString()}
+        {layer.followPointer ? " · Follows pointer" : ""}
+      </p>
+    </div>
   );
 }
 

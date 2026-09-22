@@ -2,11 +2,13 @@ import type { EffectForgeProject } from "@effectforge/schema";
 import { createClickBurstStars } from "./definitions/click-burst-stars.js";
 import { createCursorAttractSparkles } from "./definitions/cursor-attract-sparkles.js";
 import { createCursorRepelMist } from "./definitions/cursor-repel-mist.js";
+import { createCursorTrailGlow } from "./definitions/cursor-trail-glow.js";
 
 export type BuiltinPresetId =
   | "cursor-attract-sparkles"
   | "cursor-repel-mist"
-  | "click-burst-stars";
+  | "click-burst-stars"
+  | "cursor-trail-glow";
 
 export interface EffectPreset {
   id: string;
@@ -37,5 +39,12 @@ export const BUILTIN_PRESETS: EffectPreset[] = [
     description: "Ambient starfield with colorful bursts on click.",
     tags: ["pointer", "click", "burst"],
     create: createClickBurstStars,
+  },
+  {
+    id: "cursor-trail-glow",
+    name: "Cursor Trail Glow",
+    description: "Smooth additive ribbon that follows the pointer with a cyan glow.",
+    tags: ["pointer", "trail", "glow"],
+    create: createCursorTrailGlow,
   },
 ];

@@ -17,6 +17,7 @@ import {
 import { PointerService } from "@effectforge/pointer";
 import { SimulationClock } from "./clock.js";
 import { ParticleScene } from "./particle-scene.js";
+import { TrailScene } from "./trail-scene.js";
 import { applyCanvasBackground } from "./scene-background.js";
 import { StatsTracker } from "./stats-tracker.js";
 
@@ -66,6 +67,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
   private camera: OrthographicCamera | null = null;
   private testQuad: Mesh | null = null;
   private particleScene: ParticleScene | null = null;
+  private trailScene: TrailScene | null = null;
   private project: EffectForgeProject | null = null;
 
   private width = 1;
@@ -132,11 +134,12 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
 
   async loadProject(project: EffectForgeProject): Promise<void> {
     this.assertInitialized();
-    this.clearParticleScene();
+    this.clearEffectScenes();
     this.project = project;
     applyCanvasBackground(this.scene!, project.canvas.background);
     this.particleScene = new ParticleScene(project, this.scene!, this.pointer);
-    this.setTestQuadVisible(this.particleScene.layerCount === 0);
+    this.trailScene = new TrailScene(project, this.scene!, this.pointer);
+    this.setTestQuadVisible(this.getEffectLayerCount() === 0);
     this.resize(project.canvas.width, project.canvas.height, this.dpr);
   }
 
@@ -146,13 +149,16 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     this.project = project;
     applyCanvasBackground(this.scene!, project.canvas.background);
 
-    if (this.particleScene?.syncProjectLayers(project)) {
+    const particlesSynced = this.particleScene?.syncProjectLayers(project) ?? true;
+    const trailsSynced = this.trailScene?.syncProjectLayers(project) ?? true;
+    if (particlesSynced && trailsSynced) {
       return;
     }
 
-    this.clearParticleScene();
+    this.clearEffectScenes();
     this.particleScene = new ParticleScene(project, this.scene!, this.pointer);
-    this.setTestQuadVisible(this.particleScene.layerCount === 0);
+    this.trailScene = new TrailScene(project, this.scene!, this.pointer);
+    this.setTestQuadVisible(this.getEffectLayerCount() === 0);
   }
 
   resize(width: number, height: number, dpr: number): void {
@@ -188,12 +194,14 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
   stop(): void {
     this.clock.stop();
     this.particleScene?.stop();
+    this.trailScene?.stop();
     this.updateTestQuadUniforms();
   }
 
   seek(time: number): void {
     this.clock.seek(time);
     this.particleScene?.seek(time);
+    this.trailScene?.seek(time);
     this.updateTestQuadUniforms();
   }
 
@@ -218,10 +226,11 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     }
 
     this.particleScene?.syncMeshes();
+    this.trailScene?.syncMeshes();
     this.updateTestQuadUniforms();
     this.webgl!.render(this.scene!, this.camera!);
     const drawCalls = this.webgl!.info.render.calls;
-    const batchCount = 1 + (this.particleScene?.layerCount ?? 0);
+    const batchCount = 1 + (this.particleScene?.layerCount ?? 0) + (this.trailScene?.layerCount ?? 0);
     this.stats.setRenderInfo(drawCalls, batchCount);
     this.stats.setParticleCount(this.particleScene?.totalActiveParticles ?? 0);
   }
@@ -268,7 +277,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
       return;
     }
 
-    this.clearParticleScene();
+    this.clearEffectScenes();
     this.testQuad?.geometry.dispose();
     const material = this.testQuad?.material;
     if (material instanceof ShaderMaterial) {
@@ -326,18 +335,28 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
 
   private onSimulationStep(dt: number, time: number): void {
     this.particleScene?.simulate(dt);
+    this.trailScene?.simulate(dt);
     this.simulationCallback?.(dt, time);
   }
 
-  /** Run one simulation step with pointer-aware particle systems. */
+  /** Run one simulation step with pointer-aware effect systems. */
   stepSimulation(dt: number): void {
     this.particleScene?.simulate(dt);
+    this.trailScene?.simulate(dt);
   }
 
-  private clearParticleScene(): void {
+  private getEffectLayerCount(): number {
+    return (this.particleScene?.layerCount ?? 0) + (this.trailScene?.layerCount ?? 0);
+  }
+
+  private clearEffectScenes(): void {
     if (this.particleScene && this.scene) {
       this.particleScene.dispose(this.scene);
       this.particleScene = null;
+    }
+    if (this.trailScene && this.scene) {
+      this.trailScene.dispose(this.scene);
+      this.trailScene = null;
     }
   }
 

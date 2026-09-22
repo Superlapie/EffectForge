@@ -1,5 +1,5 @@
 import { CommandSession } from "@effectforge/commands";
-import { createDefaultParticleLayer } from "@effectforge/core";
+import { createDefaultParticleLayer, createDefaultTrailLayer } from "@effectforge/core";
 import type { EffectForgeProject, Layer } from "@effectforge/schema";
 import type { EditorPlaybackState, EditorState } from "./editor-state.js";
 
@@ -92,6 +92,34 @@ export class EditorController {
     this.execute({ type: "AddLayer", payload: { layer } });
     this.selectedLayerId = layer.id;
     this.emit();
+  }
+
+  addTrailLayer(): void {
+    const layer = createDefaultTrailLayer(`Trail ${this.session.getProject().layers.length + 1}`);
+    this.execute({ type: "AddLayer", payload: { layer } });
+    this.selectedLayerId = layer.id;
+    this.emit();
+  }
+
+  setTrailWidth(layerId: string, width: number): void {
+    this.execute({
+      type: "SetLayerProperty",
+      payload: { layerId, path: "width", value: width },
+    });
+  }
+
+  setTrailFade(layerId: string, fade: number): void {
+    this.execute({
+      type: "SetLayerProperty",
+      payload: { layerId, path: "fade", value: fade },
+    });
+  }
+
+  setTrailMinDistance(layerId: string, minDistance: number): void {
+    this.execute({
+      type: "SetLayerProperty",
+      payload: { layerId, path: "minDistance", value: minDistance },
+    });
   }
 
   duplicateLayer(layerId: string): void {

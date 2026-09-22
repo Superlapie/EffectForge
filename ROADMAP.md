@@ -93,6 +93,14 @@ Features are marked complete only when implementation works, tests exist, and in
 - [x] CLI `export` command and editor export ZIP download
 - [x] CI export validation (vanilla + react-vite builds)
 
-## Phase 11–29
+## Phase 11: Cursor Trail Layers
+
+- [x] `@effectforge/trails` ring-buffer trail simulation
+- [x] `TrailScene` + ribbon mesh rendering in `renderer-three`
+- [x] `createDefaultTrailLayer()` factory and editor trail inspector
+- [x] `cursor-trail-glow` preset
+- [x] Unit and renderer integration tests
+
+## Phase 12–29
 
 See master specification for remaining phases. Each will be checked off as completed.

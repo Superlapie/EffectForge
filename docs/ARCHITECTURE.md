@@ -19,7 +19,8 @@ core
 renderer-three (Phase 3+)
   |
   +------ particles (Phase 4+)
-  +------ trails, distortion, text-effects, postfx (later phases)
+  +------ trails (Phase 11)
+  +------ distortion, text-effects, postfx (later phases)
 
 editor (Phase 7)
   |
@@ -39,6 +40,7 @@ cli, mcp ------ core / commands / exporters
 - **@effectforge/renderer** — Renderer interface contract
 - **@effectforge/renderer-three** — Three.js WebGL2 renderer (lifecycle, clock, capture, stats, instanced particles)
 - **@effectforge/particles** — Custom particle engine (SoA store, emitters, behaviors, pointer interaction)
+- **@effectforge/trails** — Cursor trail ring-buffer simulation
 - **@effectforge/pointer** — Normalized pointer input service
 - **@effectforge/presets** — Production effect presets
 - **@effectforge/commands** — Command validation, execution, undo/redo, transactions

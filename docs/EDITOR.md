@@ -5,9 +5,9 @@ The web editor at `/editor` provides a minimal authoring surface for particle ef
 ## Layout
 
 - **Toolbar** — Project name, open/save `.effectforge`, import/export preset bundles, preset loader, undo/redo, play/pause
-- **Layer panel** — Select, enable/disable, duplicate, and add particle layers
+- **Layer panel** — Select, enable/disable, duplicate, and add particle or trail layers
 - **Viewport** — Live WebGL preview with pointer interaction
-- **Inspector** — Edit layer name, opacity, emission rate, and common particle parameters
+- **Inspector** — Edit layer name, opacity, and kind-specific parameters (particles, trails)
 - **Timeline** — Scrub playback time within the project duration
 
 ## Keyboard shortcuts

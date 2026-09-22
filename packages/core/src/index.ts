@@ -25,5 +25,7 @@ export {
 export {
   createProject,
   createDefaultParticleLayer,
+  createDefaultTrailLayer,
   type CreateProjectOptions,
+  type CreateDefaultTrailLayerOptions,
 } from "./create-project.js";
