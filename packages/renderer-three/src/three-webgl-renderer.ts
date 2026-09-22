@@ -14,6 +14,7 @@ import {
   ShaderMaterial,
   WebGLRenderer,
 } from "three";
+import { PointerService } from "@effectforge/pointer";
 import { SimulationClock } from "./clock.js";
 import { ParticleScene } from "./particle-scene.js";
 import { applyCanvasBackground } from "./scene-background.js";
@@ -53,6 +54,8 @@ const TEST_FRAGMENT_SHADER = `
  * Phase 3: lifecycle, clock, deterministic stepping, test quad, capture, stats.
  */
 export class ThreeWebGLRenderer implements EffectForgeRenderer {
+  readonly pointer = new PointerService();
+
   private readonly clock: SimulationClock;
   private readonly stats = new StatsTracker();
   private readonly useWallClock: boolean;
@@ -132,7 +135,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     this.clearParticleScene();
     this.project = project;
     applyCanvasBackground(this.scene!, project.canvas.background);
-    this.particleScene = new ParticleScene(project, this.scene!);
+    this.particleScene = new ParticleScene(project, this.scene!, this.pointer);
     this.setTestQuadVisible(this.particleScene.layerCount === 0);
     this.resize(project.canvas.width, project.canvas.height, this.dpr);
   }
@@ -142,6 +145,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     this.width = Math.max(1, width);
     this.height = Math.max(1, height);
     this.dpr = Math.max(0.25, dpr);
+    this.pointer.setAspect(this.width / this.height);
     this.stats.setDpr(this.dpr);
 
     const pixelWidth = Math.round(this.width * this.dpr);
@@ -271,6 +275,27 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     return this.clock.getTime();
   }
 
+  handlePointerMove(
+    clientX: number,
+    clientY: number,
+    rect: Pick<DOMRectReadOnly, "left" | "top" | "width" | "height">,
+  ): void {
+    this.pointer.updateFromClient(clientX, clientY, rect, this.width / this.height);
+  }
+
+  handlePointerDown(
+    clientX: number,
+    clientY: number,
+    rect: Pick<DOMRectReadOnly, "left" | "top" | "width" | "height">,
+  ): void {
+    this.pointer.updateFromClient(clientX, clientY, rect, this.width / this.height);
+    this.pointer.markClick();
+  }
+
+  handlePointerLeave(): void {
+    this.pointer.deactivate();
+  }
+
   private assertInitialized(): void {
     if (!this.initialized || this.disposed) {
       throw new Error("ThreeWebGLRenderer is not initialized");
@@ -287,6 +312,11 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
   private onSimulationStep(dt: number, time: number): void {
     this.particleScene?.simulate(dt);
     this.simulationCallback?.(dt, time);
+  }
+
+  /** Run one simulation step with pointer-aware particle systems. */
+  stepSimulation(dt: number): void {
+    this.particleScene?.simulate(dt);
   }
 
   private clearParticleScene(): void {

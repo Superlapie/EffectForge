@@ -1,5 +1,5 @@
 import type { Burst, ParticleEmitter } from "@effectforge/schema";
-import type { RandomStream } from "@effectforge/core";
+import type { RandomStream } from "@effectforge/core/prng";
 
 export interface BurstTrigger {
   burstIndex: number;

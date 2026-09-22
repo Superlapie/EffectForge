@@ -1,20 +1,28 @@
-import { deriveStream, type RandomStream } from "@effectforge/core";
+import type { RandomStream } from "@effectforge/core/prng";
+import { deriveStream } from "@effectforge/core/prng";
 import type { ParticleLayer } from "@effectforge/schema";
 import { applyBehaviors } from "./behaviors.js";
 import { collectBurstTriggers } from "./bursts.js";
 import { sampleEmitterPosition, sampleInitialVelocity } from "./emitters.js";
 import { applyLifetimeCurves } from "./lifetime.js";
+import {
+  layerSupportsPointerInteraction,
+  type PointerInteractionContext,
+} from "./pointer-context.js";
 import { ParticleStore } from "./store.js";
 import { sampleColor, sampleNumeric } from "./values.js";
 
 export interface ParticleSystemOptions {
   layer: ParticleLayer;
   projectSeed: number;
+  clickBurstCount?: number;
 }
+
+const DEFAULT_CLICK_BURST_COUNT = 16;
 
 /**
  * Single particle layer simulation driver.
- * Phase 5: bursts, curve/gradient value sources, size/opacity over lifetime.
+ * Phase 6: pointer attract/repel and click bursts.
  */
 export class ParticleSystem {
   readonly layer: ParticleLayer;
@@ -22,6 +30,8 @@ export class ParticleSystem {
 
   private readonly spawnStream: RandomStream;
   private readonly burstStream: RandomStream;
+  private readonly clickBurstCount: number;
+  private readonly pointerInteractive: boolean;
   private emissionAccumulator = 0;
   private elapsed = 0;
   private previousElapsed = 0;
@@ -33,6 +43,8 @@ export class ParticleSystem {
     this.store = new ParticleStore(options.layer.emitter.maxParticles);
     this.spawnStream = deriveStream(options.projectSeed, `particles:${options.layer.id}:spawn`);
     this.burstStream = deriveStream(options.projectSeed, `particles:${options.layer.id}:burst`);
+    this.clickBurstCount = options.clickBurstCount ?? DEFAULT_CLICK_BURST_COUNT;
+    this.pointerInteractive = layerSupportsPointerInteraction(options.layer.behaviors);
   }
 
   get activeCount(): number {
@@ -58,20 +70,25 @@ export class ParticleSystem {
     this.previousElapsed = this.elapsed;
   }
 
-  simulate(dt: number): void {
+  simulate(dt: number, pointer?: PointerInteractionContext | null): void {
     if (!this.layer.enabled || dt <= 0) {
       return;
     }
 
-    this.runPrewarmIfNeeded();
+    this.runPrewarmIfNeeded(pointer);
 
     this.previousElapsed = this.elapsed;
     this.elapsed += dt;
+
+    if (pointer?.clicked && this.pointerInteractive) {
+      this.spawnClickBurst(pointer.position);
+    }
+
     this.emitParticles(dt);
-    this.integrateParticles(dt);
+    this.integrateParticles(dt, pointer);
   }
 
-  private runPrewarmIfNeeded(): void {
+  private runPrewarmIfNeeded(pointer?: PointerInteractionContext | null): void {
     const emitter = this.layer.emitter;
     if (!emitter.prewarm || this.prewarmed || this.elapsed > 0) {
       return;
@@ -84,7 +101,7 @@ export class ParticleSystem {
       this.previousElapsed = this.elapsed;
       this.elapsed += stepDt;
       this.emitParticles(stepDt);
-      this.integrateParticles(stepDt);
+      this.integrateParticles(stepDt, pointer);
     }
     this.prewarmed = true;
   }
@@ -139,16 +156,30 @@ export class ParticleSystem {
     }
   }
 
-  private spawnParticle(): boolean {
+  private spawnClickBurst(position: { x: number; y: number; z: number }): void {
+    for (let i = 0; i < this.clickBurstCount; i++) {
+      if (!this.spawnParticle({ x: position.x, y: position.y, z: position.z }, true)) {
+        break;
+      }
+    }
+  }
+
+  private spawnParticle(
+    positionOverride?: { x: number; y: number; z: number },
+    burstVelocity = false,
+  ): boolean {
     const index = this.store.spawn();
     if (index === null) {
       return false;
     }
 
     const sampleT = this.spawnStream.next();
-    const spawnPosition = sampleEmitterPosition(this.layer.emitter, this.spawnStream);
+    const spawnPosition =
+      positionOverride ?? sampleEmitterPosition(this.layer.emitter, this.spawnStream);
     const speed = sampleNumeric(this.layer.speed, this.spawnStream, sampleT);
-    const velocity = sampleInitialVelocity(speed, this.spawnStream);
+    const velocity = burstVelocity
+      ? sampleInitialVelocity(speed * 1.5, this.spawnStream)
+      : sampleInitialVelocity(speed, this.spawnStream);
     const lifetime = Math.max(0.001, sampleNumeric(this.layer.lifetime, this.spawnStream, sampleT));
     const size = Math.max(0.001, sampleNumeric(this.layer.size, this.spawnStream, sampleT));
     const opacity = Math.min(
@@ -189,7 +220,7 @@ export class ParticleSystem {
     return true;
   }
 
-  private integrateParticles(dt: number): void {
+  private integrateParticles(dt: number, pointer?: PointerInteractionContext | null): void {
     const behaviors = this.layer.behaviors;
     const sizeCurve = this.layer.sizeOverLifetime;
     const opacityCurve = this.layer.opacityOverLifetime;
@@ -202,7 +233,7 @@ export class ParticleSystem {
         return;
       }
 
-      applyBehaviors(this.store, index, behaviors, dt);
+      applyBehaviors(this.store, index, behaviors, dt, pointer);
       applyLifetimeCurves(this.store, index, sizeCurve, opacityCurve);
     });
   }

@@ -32,6 +32,13 @@ The EffectForge particle engine is implemented independently — not based on th
 - **Prewarm** — Optional emitter pre-simulation on first step
 - Benchmark — `pnpm bench:particles`
 
+## Phase 6 (implemented)
+
+- `@effectforge/pointer` — `PointerService` with normalized and world-space coordinates
+- `cursor-attract` / `cursor-repel` behaviors driven by pointer state
+- Click bursts on pointer-interactive layers
+- `@effectforge/presets` — three production presets with web preview at `/editor`
+
 ## Upcoming
 
-- **Phase 6** — Pointer interaction and first presets
+- **Phase 7** — Full editor UI

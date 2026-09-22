@@ -9,3 +9,4 @@ export {
 } from "./three-webgl-renderer.js";
 export { ParticleInstancedMesh } from "./particle-instanced-mesh.js";
 export { ParticleScene } from "./particle-scene.js";
+export { PointerService } from "@effectforge/pointer";

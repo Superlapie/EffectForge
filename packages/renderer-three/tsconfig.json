@@ -10,6 +10,7 @@
     { "path": "../schema" },
     { "path": "../renderer" },
     { "path": "../particles" },
+    { "path": "../pointer" },
     { "path": "../core" }
   ]
 }

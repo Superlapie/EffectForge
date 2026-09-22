@@ -1,5 +1,5 @@
 import type { ColorValueSource, NumericValueSource } from "@effectforge/schema";
-import type { RandomStream } from "@effectforge/core";
+import type { RandomStream } from "@effectforge/core/prng";
 import { parseHexColor } from "./color.js";
 import { evaluateParameterCurve } from "./curves.js";
 import { evaluateColorGradient } from "./gradients.js";

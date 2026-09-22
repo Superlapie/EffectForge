@@ -1,4 +1,4 @@
-import { createRandomStream } from "@effectforge/core";
+import { createRandomStream } from "@effectforge/core/prng";
 import { describe, expect, it } from "vitest";
 import { sampleEmitterPosition } from "./emitters.js";
 

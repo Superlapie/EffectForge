@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@effectforge/core", "@effectforge/schema"],
+  transpilePackages: [
+    "@effectforge/schema",
+    "@effectforge/presets",
+    "@effectforge/pointer",
+    "@effectforge/particles",
+    "@effectforge/renderer",
+    "@effectforge/renderer-three",
+  ],
 };
 
 export default nextConfig;

@@ -61,9 +61,9 @@ Features are marked complete only when implementation works, tests exist, and in
 
 ## Phase 6: Pointer Interaction
 
-- [ ] Normalized pointer service
-- [ ] Attract/repel, click bursts
-- [ ] First production presets
+- [x] Normalized pointer service
+- [x] Attract/repel, click bursts
+- [x] First production presets
 
 ## Phase 7: Editor Foundation
 

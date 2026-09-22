@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@effectforge/core": "workspace:*",
+    "@effectforge/presets": "workspace:*",
+    "@effectforge/renderer-three": "workspace:*",
     "@effectforge/schema": "workspace:*",
     "next": "16.3.5",
     "react": "19.2.8",

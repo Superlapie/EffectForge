@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@effectforge/core": "workspace:*",
+    "@effectforge/pointer": "workspace:*",
     "@effectforge/schema": "workspace:*"
   },
   "devDependencies": {

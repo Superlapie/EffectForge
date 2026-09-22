@@ -55,6 +55,12 @@ importers:
       '@effectforge/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@effectforge/presets':
+        specifier: workspace:*
+        version: link:../../packages/presets
+      '@effectforge/renderer-three':
+        specifier: workspace:*
+        version: link:../../packages/renderer-three
       '@effectforge/schema':
         specifier: workspace:*
         version: link:../../packages/schema
@@ -133,6 +139,28 @@ importers:
       '@effectforge/core':
         specifier: workspace:*
         version: link:../core
+      '@effectforge/pointer':
+        specifier: workspace:*
+        version: link:../pointer
+      '@effectforge/schema':
+        specifier: workspace:*
+        version: link:../schema
+    devDependencies:
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+
+  packages/pointer:
+    devDependencies:
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+
+  packages/presets:
+    dependencies:
+      '@effectforge/core':
+        specifier: workspace:*
+        version: link:../core
       '@effectforge/schema':
         specifier: workspace:*
         version: link:../schema
@@ -156,6 +184,9 @@ importers:
       '@effectforge/particles':
         specifier: workspace:*
         version: link:../particles
+      '@effectforge/pointer':
+        specifier: workspace:*
+        version: link:../pointer
       '@effectforge/renderer':
         specifier: workspace:*
         version: link:../renderer

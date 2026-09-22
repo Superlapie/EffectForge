@@ -1,9 +1,9 @@
 {
-  "name": "@effectforge/renderer-three",
+  "name": "@effectforge/pointer",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Three.js WebGL2 implementation of the EffectForge renderer",
+  "description": "Normalized pointer input service for EffectForge effects",
   "license": "MIT",
   "exports": {
     ".": {
@@ -20,16 +20,7 @@
     "test": "vitest run",
     "clean": "rm -rf dist"
   },
-  "dependencies": {
-    "@effectforge/particles": "workspace:*",
-    "@effectforge/pointer": "workspace:*",
-    "@effectforge/renderer": "workspace:*",
-    "@effectforge/schema": "workspace:*",
-    "three": "^0.180.0"
-  },
   "devDependencies": {
-    "@effectforge/core": "workspace:*",
-    "@types/three": "^0.180.0",
     "vitest": "^3.2.4"
   }
 }

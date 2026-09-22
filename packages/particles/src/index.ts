@@ -5,6 +5,10 @@ export { evaluateColorGradient } from "./gradients.js";
 export { sampleNumeric, sampleColor } from "./values.js";
 export { sampleEmitterPosition, sampleInitialVelocity } from "./emitters.js";
 export { applyBehaviors } from "./behaviors.js";
+export {
+  layerSupportsPointerInteraction,
+  type PointerInteractionContext,
+} from "./pointer-context.js";
 export { applyLifetimeCurves } from "./lifetime.js";
 export {
   collectBurstTriggers,

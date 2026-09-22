@@ -47,6 +47,21 @@ describe("ParticleSystem", () => {
     expect(system.store.velocity[p + 1]).toBeLessThan(1);
   });
 
+  it("spawns click bursts at the pointer for interactive layers", () => {
+    const layer = createDefaultParticleLayer("Click");
+    layer.emitter.rate = 0;
+    layer.emitter.maxParticles = 100;
+    layer.behaviors = [{ type: "cursor-attract", strength: 1, radius: 0.5 }];
+
+    const system = new ParticleSystem({ layer, projectSeed: 9, clickBurstCount: 5 });
+    system.simulate(1 / 60, {
+      position: { x: 0.2, y: -0.1, z: 0 },
+      active: true,
+      clicked: true,
+    });
+    expect(system.activeCount).toBe(5);
+  });
+
   it("fires burst emissions", () => {
     const layer = createDefaultParticleLayer("Burst");
     layer.emitter.rate = 0;

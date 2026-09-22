@@ -1,4 +1,5 @@
 import { ParticleSystem } from "@effectforge/particles";
+import type { PointerService } from "@effectforge/pointer";
 import type { EffectForgeProject, ParticleLayer } from "@effectforge/schema";
 import type { Scene } from "three";
 import { ParticleInstancedMesh } from "./particle-instanced-mesh.js";
@@ -12,8 +13,10 @@ interface ParticleLayerRuntime {
 /** Manages particle layer simulations and instanced billboard rendering. */
 export class ParticleScene {
   private readonly runtimes: ParticleLayerRuntime[] = [];
+  private readonly pointer: PointerService | null;
 
-  constructor(project: EffectForgeProject, scene: Scene) {
+  constructor(project: EffectForgeProject, scene: Scene, pointer: PointerService | null = null) {
+    this.pointer = pointer;
     for (const layer of project.layers) {
       if (layer.kind !== "particles" || !layer.enabled) {
         continue;
@@ -38,9 +41,11 @@ export class ParticleScene {
   }
 
   simulate(dt: number): void {
+    const pointerState = this.pointer?.toInteractionState() ?? null;
     for (const runtime of this.runtimes) {
-      runtime.system.simulate(dt);
+      runtime.system.simulate(dt, pointerState);
     }
+    this.pointer?.consumeClick();
   }
 
   seek(time: number): void {

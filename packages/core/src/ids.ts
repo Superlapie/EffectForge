@@ -16,9 +16,12 @@ export function generateId(prefix: string, seed: number, length = 12): string {
   return id;
 }
 
-import { randomUUID } from "node:crypto";
-
 /** Generate a non-deterministic ID for interactive editor use. */
 export function generateUniqueId(prefix: string): string {
-  return `${prefix}${randomUUID().replace(/-/g, "").slice(0, 12)}`;
+  if (typeof globalThis.crypto !== "undefined" && typeof globalThis.crypto.randomUUID === "function") {
+    return `${prefix}${globalThis.crypto.randomUUID().replace(/-/g, "").slice(0, 12)}`;
+  }
+
+  const stream = deriveStream(Date.now(), `unique-id:${prefix}`);
+  return generateId(prefix, stream.nextInt(0, 2_147_483_647));
 }

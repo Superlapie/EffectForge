@@ -11,7 +11,7 @@ describe("ParticleScene", () => {
     smoke.emitter.rate = 120;
     const project = createProject({ layers: [sparks, smoke] });
     const scene = new Scene();
-    const particleScene = new ParticleScene(project, scene);
+    const particleScene = new ParticleScene(project, scene, null);
 
     expect(particleScene.layerCount).toBe(2);
     for (let i = 0; i < 5; i++) {
