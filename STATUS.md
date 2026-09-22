@@ -1,0 +1,39 @@
+# EffectForge Status
+
+Last updated: Phase 0–1 complete
+
+## What currently works
+
+- **Monorepo bootstrap** — pnpm workspaces, Turborepo, TypeScript strict config, ESLint, Prettier
+- **CI pipeline** — Format check, lint, typecheck, unit tests, build, license audit
+- **@effectforge/schema** — Full Zod 4 project schema with layer discriminated unions, curves, gradients, value sources, assets
+- **@effectforge/core** — Project creation, validation, migration framework, diagnostics, deterministic PRNG (Mulberry32)
+- **@effectforge/renderer** — Renderer interface contract (types only)
+- **@effectforge/commands** — Stub package for dependency graph (Phase 2)
+- **@effectforge/web** — Next.js 16 landing page, docs placeholder, editor placeholder route
+- **@effectforge/cli** — `inspect`, `create`, `validate` commands
+- **License audit tooling** — Automated dependency license check
+
+## What is partially implemented
+
+- **Web editor** — Route exists; full editor UI is Phase 7
+- **CLI** — Only basic validate/create/inspect; full commands in Phase 19
+- **Desktop / MCP apps** — Package stubs only
+
+## What is not implemented
+
+- Command engine with undo/redo (Phase 2)
+- Three.js renderer (Phase 3)
+- Particle engine (Phase 4–5)
+- Pointer interaction (Phase 6)
+- Editor UI (Phase 7)
+- Project persistence / `.effectforge` archives (Phase 8)
+- Presets, exporters, post-processing, trails, and all later phases
+
+## What is being worked on next
+
+**Phase 2: Command Engine** — Command definitions, validation, executor, history, undo/redo, transactions
+
+## Known regressions
+
+None at this stage.

@@ -1,0 +1,25 @@
+{
+  "name": "@effectforge/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "EffectForge command-line interface",
+  "license": "MIT",
+  "bin": {
+    "effectforge": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "dev": "node --watch dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@effectforge/core": "workspace:*",
+    "@effectforge/schema": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "typescript": "^5.9.3"
+  }
+}

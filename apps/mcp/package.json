@@ -1,0 +1,12 @@
+{
+  "name": "@effectforge/mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EffectForge MCP server — Phase 20",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo 'MCP server scaffold — Phase 20'",
+    "typecheck": "echo 'No TypeScript sources yet'",
+    "clean": "true"
+  }
+}

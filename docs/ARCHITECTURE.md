@@ -1,0 +1,62 @@
+# EffectForge Architecture
+
+EffectForge is a TypeScript monorepo for visual effects authoring and compilation.
+
+## Package dependency flow
+
+```text
+schema
+  |
+  v
+core
+  |
+  +------ commands (Phase 2)
+  |
+  +------ renderer abstractions (Phase 3)
+  |
+  +------ project-format (Phase 8)
+
+renderer-three (Phase 3+)
+  |
+  +------ particles (Phase 4+)
+  +------ trails, distortion, text-effects, postfx (later phases)
+
+editor (Phase 7)
+  |
+  +------ core, commands, renderer, ui
+
+apps/web ------ editor
+apps/desktop -- editor
+cli, mcp ------ core / commands / exporters
+```
+
+## Current implementation status
+
+### Implemented (Phase 0–1)
+
+- **@effectforge/schema** — Zod 4 schemas for projects, layers, curves, gradients, value sources, assets
+- **@effectforge/core** — Project creation, validation, migration framework, diagnostics, deterministic PRNG
+- **@effectforge/renderer** — Renderer interface contract (stub)
+- **@effectforge/commands** — Command types stub (Phase 2)
+- **@effectforge/web** — Next.js 16 landing page and editor placeholder
+- **@effectforge/cli** — Minimal validate/create/inspect commands
+
+### Planned
+
+See `ROADMAP.md` for the full phased delivery plan.
+
+## Command system (Phase 2)
+
+All persistent project mutations will go through validated commands with undo/redo and transaction grouping. Editor UI, CLI, and MCP will share the same command executor.
+
+## Renderer design (Phase 3+)
+
+EffectForge owns the render loop. React handles editor UI only. The primary backend is Three.js WebGL2, wrapped behind `EffectForgeRenderer`. A future WebGPU backend will be a separate implementation.
+
+## Project model
+
+Projects are plain serializable JSON documents validated by Zod. No Three.js types are persisted. See `docs/PROJECT_FORMAT.md`.
+
+## Determinism
+
+Every project has a `seed`. Effect simulation uses deterministic PRNG streams (`createRandomStream`, `deriveStream`). Never use `Math.random()` in simulation code.
