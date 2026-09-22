@@ -1,6 +1,6 @@
 # EffectForge Status
 
-Last updated: Phase 13 complete
+Last updated: Phase 14 complete
 
 ## What currently works
 
@@ -14,6 +14,7 @@ Last updated: Phase 13 complete
 - **@effectforge/trails** — Ring-buffer trail simulation with pointer following
 - **@effectforge/postfx** — Post-processing layer resolution and fullscreen pass pipeline
 - **@effectforge/distortion** — Distortion layer resolution and displacement pass pipeline
+- **@effectforge/text** — Animated text layout and glyph effect simulation
 - **@effectforge/pointer** — Normalized pointer service with client-to-world coordinate mapping
 - **@effectforge/presets** — Built-in presets (including cursor trail glow) plus `.effectforge-preset` bundle export/import
 - **@effectforge/runtime** — `mountEffect()` for exported projects (pointer, resize, render loop)
@@ -29,16 +30,16 @@ Last updated: Phase 13 complete
 
 - **CLI** — Core commands only; full commands in Phase 19
 - **Desktop / MCP apps** — Package stubs only
-- **Inspector** — Particle, trail, ripple distortion, and bloom postfx layers
+- **Inspector** — Particle, trail, text, ripple distortion, and bloom postfx layers
 - **Export validation** — Full build for vanilla + react-vite; Next.js export generated but not CI-built yet
 
 ## What is not implemented
 
-- Text, model layers, and all later phases
+- Model layers and all later phases
 
 ## What is being worked on next
 
-**Phase 14+** — See ROADMAP.md
+**Phase 15+** — See ROADMAP.md
 
 ## Known regressions
 

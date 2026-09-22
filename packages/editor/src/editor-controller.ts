@@ -3,9 +3,11 @@ import {
   createDefaultParticleLayer,
   createDefaultDistortionLayer,
   createDefaultPostFxLayer,
+  createDefaultTextLayer,
   createDefaultTrailLayer,
   type DefaultDistortionEffect,
   type DefaultPostFxEffect,
+  type DefaultTextEffect,
 } from "@effectforge/core";
 import type { EffectForgeProject, Layer } from "@effectforge/schema";
 import type { EditorPlaybackState, EditorState } from "./editor-state.js";
@@ -116,6 +118,13 @@ export class EditorController {
     this.emit();
   }
 
+  addTextLayer(effect: DefaultTextEffect = "fade"): void {
+    const layer = createDefaultTextLayer("EffectForge", effect);
+    this.execute({ type: "AddLayer", payload: { layer } });
+    this.selectedLayerId = layer.id;
+    this.emit();
+  }
+
   addDistortionLayer(effect: DefaultDistortionEffect = "ripple"): void {
     const layer = createDefaultDistortionLayer(
       effect === "ripple" ? "Ripple" : effect === "heat-haze" ? "Heat Haze" : "Lens",
@@ -155,6 +164,34 @@ export class EditorController {
     this.execute({
       type: "SetLayerProperty",
       payload: { layerId, path: `effect.${path}`, value },
+    });
+  }
+
+  setTextContent(layerId: string, text: string): void {
+    this.execute({
+      type: "SetLayerProperty",
+      payload: { layerId, path: "text", value: text },
+    });
+  }
+
+  setTextFontSize(layerId: string, fontSize: number): void {
+    this.execute({
+      type: "SetLayerProperty",
+      payload: { layerId, path: "fontSize", value: fontSize },
+    });
+  }
+
+  setTextDuration(layerId: string, duration: number): void {
+    this.execute({
+      type: "SetLayerProperty",
+      payload: { layerId, path: "duration", value: duration },
+    });
+  }
+
+  setTextEffectMode(layerId: string, effectMode: string): void {
+    this.execute({
+      type: "SetLayerProperty",
+      payload: { layerId, path: "effectMode", value: effectMode },
     });
   }
 

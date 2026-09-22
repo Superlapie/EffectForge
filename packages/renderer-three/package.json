@@ -28,6 +28,7 @@
     "@effectforge/pointer": "workspace:*",
     "@effectforge/renderer": "workspace:*",
     "@effectforge/schema": "workspace:*",
+    "@effectforge/text": "workspace:*",
     "three": "^0.180.0"
   },
   "devDependencies": {

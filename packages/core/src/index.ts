@@ -28,8 +28,10 @@ export {
   createDefaultTrailLayer,
   createDefaultPostFxLayer,
   createDefaultDistortionLayer,
+  createDefaultTextLayer,
   type CreateProjectOptions,
   type CreateDefaultTrailLayerOptions,
   type DefaultPostFxEffect,
   type DefaultDistortionEffect,
+  type DefaultTextEffect,
 } from "./create-project.js";

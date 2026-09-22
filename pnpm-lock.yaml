@@ -294,6 +294,9 @@ importers:
       '@effectforge/schema':
         specifier: workspace:*
         version: link:../schema
+      '@effectforge/text':
+        specifier: workspace:*
+        version: link:../text
       '@effectforge/trails':
         specifier: workspace:*
         version: link:../trails
@@ -329,6 +332,19 @@ importers:
       zod:
         specifier: ^4.1.11
         version: 4.6.5
+    devDependencies:
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)
+
+  packages/text:
+    dependencies:
+      '@effectforge/core':
+        specifier: workspace:*
+        version: link:../core
+      '@effectforge/schema':
+        specifier: workspace:*
+        version: link:../schema
     devDependencies:
       vitest:
         specifier: ^3.2.4

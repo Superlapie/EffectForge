@@ -6,6 +6,8 @@ import type {
   NumericValueSource,
   ParticleLayer,
   PostFxLayer,
+  TextEffectMode,
+  TextLayer,
   TrailLayer,
 } from "@effectforge/schema";
 import { useEditorState } from "./use-editor-controller";
@@ -55,6 +57,17 @@ export function LayerInspector({ controller }: LayerInspectorProps) {
           <h2 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Inspector</h2>
         </div>
         <TrailInspector controller={controller} layer={layer} />
+      </aside>
+    );
+  }
+
+  if (layer.kind === "text") {
+    return (
+      <aside className="flex w-full flex-col border-t border-border-subtle lg:w-72 lg:border-l lg:border-t-0">
+        <div className="border-b border-border-subtle px-4 py-2">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Inspector</h2>
+        </div>
+        <TextInspector controller={controller} layer={layer} />
       </aside>
     );
   }
@@ -264,6 +277,95 @@ function PostFxInspector({
       ) : null}
 
       <p className="text-xs text-text-muted">Effect: {layer.effect.type}</p>
+    </div>
+  );
+}
+
+const TEXT_EFFECT_OPTIONS: Array<{ value: TextEffectMode; label: string }> = [
+  { value: "fade", label: "Fade" },
+  { value: "stagger", label: "Stagger" },
+  { value: "scramble", label: "Scramble" },
+  { value: "glitch-reveal", label: "Glitch reveal" },
+  { value: "neon-flicker", label: "Neon flicker" },
+  { value: "particle-assemble", label: "Particle assemble" },
+  { value: "particle-dissolve", label: "Particle dissolve" },
+  { value: "particle-scatter", label: "Particle scatter" },
+  { value: "wave", label: "Wave" },
+  { value: "electric-outline", label: "Electric outline" },
+  { value: "smoke-reveal", label: "Smoke reveal" },
+];
+
+function TextInspector({
+  controller,
+  layer,
+}: {
+  controller: EditorController;
+  layer: TextLayer;
+}) {
+  return (
+    <div className="space-y-4 overflow-y-auto p-4">
+      <Field label="Name">
+        <input
+          type="text"
+          value={layer.name}
+          onChange={(event) => controller.setLayerName(layer.id, event.target.value)}
+          className="w-full rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-sm"
+        />
+      </Field>
+
+      <Field label="Text">
+        <textarea
+          value={layer.text}
+          onChange={(event) => controller.setTextContent(layer.id, event.target.value)}
+          rows={3}
+          className="w-full rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-sm"
+        />
+      </Field>
+
+      <SliderField
+        label="Opacity"
+        value={layer.opacity}
+        min={0}
+        max={1}
+        step={0.01}
+        onChange={(value) => controller.setLayerOpacity(layer.id, value)}
+      />
+
+      <SliderField
+        label="Font size"
+        value={layer.fontSize}
+        min={12}
+        max={160}
+        step={1}
+        onChange={(value) => controller.setTextFontSize(layer.id, value)}
+      />
+
+      <SliderField
+        label="Duration"
+        value={layer.duration}
+        min={0.5}
+        max={10}
+        step={0.1}
+        onChange={(value) => controller.setTextDuration(layer.id, value)}
+      />
+
+      <Field label="Effect mode">
+        <select
+          value={layer.effectMode}
+          onChange={(event) => controller.setTextEffectMode(layer.id, event.target.value)}
+          className="w-full rounded-md border border-border-subtle bg-background-0 px-2 py-1 text-sm"
+        >
+          {TEXT_EFFECT_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </Field>
+
+      <p className="text-xs text-text-muted">
+        Alignment: {layer.alignment} · Weight: {layer.fontWeight}
+      </p>
     </div>
   );
 }

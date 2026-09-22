@@ -117,6 +117,14 @@ Features are marked complete only when implementation works, tests exist, and in
 - [x] `createDefaultDistortionLayer()` and editor ripple inspector
 - [x] `sparkles-ripple` preset
 
-## Phase 14–29
+## Phase 14: Text Layers
+
+- [x] `@effectforge/text` layout and animated glyph state system
+- [x] `TextScene` + canvas-textured `TextMesh` in `renderer-three`
+- [x] All 11 text effect modes from schema
+- [x] `createDefaultTextLayer()` and editor text inspector
+- [x] `neon-title` preset
+
+## Phase 15–29
 
 See master specification for remaining phases. Each will be checked off as completed.

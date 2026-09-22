@@ -22,7 +22,7 @@ renderer-three (Phase 3+)
   +------ trails (Phase 11)
   +------ postfx (Phase 12)
   +------ distortion (Phase 13)
-  +------ text-effects (later phases)
+  +------ text (Phase 14)
 
 editor (Phase 7)
   |
@@ -45,6 +45,7 @@ cli, mcp ------ core / commands / exporters
 - **@effectforge/trails** — Cursor trail ring-buffer simulation
 - **@effectforge/postfx** — Post-processing layer resolution and pipeline
 - **@effectforge/distortion** — Distortion layer resolution and displacement pipeline
+- **@effectforge/text** — Animated text layout and glyph effect simulation
 - **@effectforge/pointer** — Normalized pointer input service
 - **@effectforge/presets** — Production effect presets
 - **@effectforge/commands** — Command validation, execution, undo/redo, transactions

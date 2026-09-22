@@ -108,6 +108,8 @@ export type DefaultPostFxEffect = "bloom" | "vignette" | "chromatic-aberration";
 
 export type DefaultDistortionEffect = "ripple" | "heat-haze" | "lens";
 
+export type DefaultTextEffect = "fade" | "stagger" | "wave" | "neon-flicker";
+
 /** Create a default post-processing layer for quick authoring. */
 export function createDefaultPostFxLayer(
   name = "Bloom",
@@ -153,6 +155,39 @@ export function createDefaultDistortionLayer(
     opacity: 1,
     blendMode: "normal",
     effect: effectConfig,
+  };
+}
+
+/** Create a default text layer for quick authoring. */
+export function createDefaultTextLayer(
+  text = "EffectForge",
+  effect: DefaultTextEffect = "fade",
+): Layer {
+  const effectMode =
+    effect === "fade"
+      ? "fade"
+      : effect === "stagger"
+        ? "stagger"
+        : effect === "wave"
+          ? "wave"
+          : "neon-flicker";
+
+  return {
+    id: generateUniqueId("layer_"),
+    name: "Text",
+    kind: "text",
+    enabled: true,
+    locked: false,
+    opacity: 1,
+    blendMode: "normal",
+    text,
+    fontSize: 64,
+    fontWeight: 700,
+    alignment: "center",
+    lineHeight: 1.2,
+    letterSpacing: 2,
+    effectMode,
+    duration: 2.5,
   };
 }
 

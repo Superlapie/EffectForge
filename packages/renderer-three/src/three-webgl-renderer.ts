@@ -21,6 +21,7 @@ import { SimulationClock } from "./clock.js";
 import { ParticleScene } from "./particle-scene.js";
 import { DistortionPipeline } from "./distortion-pipeline.js";
 import { PostFxPipeline } from "./postfx-pipeline.js";
+import { TextScene } from "./text-scene.js";
 import { TrailScene } from "./trail-scene.js";
 import { applyCanvasBackground } from "./scene-background.js";
 import { StatsTracker } from "./stats-tracker.js";
@@ -72,6 +73,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
   private testQuad: Mesh | null = null;
   private particleScene: ParticleScene | null = null;
   private trailScene: TrailScene | null = null;
+  private textScene: TextScene | null = null;
   private distortionPipeline: DistortionPipeline | null = null;
   private postFxPipeline: PostFxPipeline | null = null;
   private project: EffectForgeProject | null = null;
@@ -145,6 +147,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     applyCanvasBackground(this.scene!, project.canvas.background);
     this.particleScene = new ParticleScene(project, this.scene!, this.pointer);
     this.trailScene = new TrailScene(project, this.scene!, this.pointer);
+    this.textScene = new TextScene(project, this.scene!);
     this.syncDistortionPipeline(project);
     this.syncPostFxPipeline(project);
     this.setTestQuadVisible(this.getEffectLayerCount() === 0);
@@ -162,13 +165,15 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
 
     const particlesSynced = this.particleScene?.syncProjectLayers(project) ?? true;
     const trailsSynced = this.trailScene?.syncProjectLayers(project) ?? true;
-    if (particlesSynced && trailsSynced) {
+    const textSynced = this.textScene?.syncProjectLayers(project) ?? true;
+    if (particlesSynced && trailsSynced && textSynced) {
       return;
     }
 
     this.clearEffectScenes();
     this.particleScene = new ParticleScene(project, this.scene!, this.pointer);
     this.trailScene = new TrailScene(project, this.scene!, this.pointer);
+    this.textScene = new TextScene(project, this.scene!);
     this.setTestQuadVisible(this.getEffectLayerCount() === 0);
   }
 
@@ -208,6 +213,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     this.clock.stop();
     this.particleScene?.stop();
     this.trailScene?.stop();
+    this.textScene?.stop();
     this.updateTestQuadUniforms();
   }
 
@@ -215,6 +221,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     this.clock.seek(time);
     this.particleScene?.seek(time);
     this.trailScene?.seek(time);
+    this.textScene?.seek(time);
     this.updateTestQuadUniforms();
   }
 
@@ -240,6 +247,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
 
     this.particleScene?.syncMeshes();
     this.trailScene?.syncMeshes();
+    this.textScene?.syncMeshes();
     this.updateTestQuadUniforms();
 
     const renderScene = () => {
@@ -271,6 +279,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
       1 +
       (this.particleScene?.layerCount ?? 0) +
       (this.trailScene?.layerCount ?? 0) +
+      (this.textScene?.layerCount ?? 0) +
       (this.distortionPipeline?.activeLayerCount ?? 0) +
       (this.postFxPipeline?.activeLayerCount ?? 0);
     this.stats.setRenderInfo(drawCalls, batchCount);
@@ -382,6 +391,7 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
   private onSimulationStep(dt: number, time: number): void {
     this.particleScene?.simulate(dt);
     this.trailScene?.simulate(dt);
+    this.textScene?.simulate(dt);
     this.simulationCallback?.(dt, time);
   }
 
@@ -389,10 +399,15 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
   stepSimulation(dt: number): void {
     this.particleScene?.simulate(dt);
     this.trailScene?.simulate(dt);
+    this.textScene?.simulate(dt);
   }
 
   private getEffectLayerCount(): number {
-    return (this.particleScene?.layerCount ?? 0) + (this.trailScene?.layerCount ?? 0);
+    return (
+      (this.particleScene?.layerCount ?? 0) +
+      (this.trailScene?.layerCount ?? 0) +
+      (this.textScene?.layerCount ?? 0)
+    );
   }
 
   private syncDistortionPipeline(project: EffectForgeProject): void {
@@ -423,6 +438,10 @@ export class ThreeWebGLRenderer implements EffectForgeRenderer {
     if (this.trailScene && this.scene) {
       this.trailScene.dispose(this.scene);
       this.trailScene = null;
+    }
+    if (this.textScene && this.scene) {
+      this.textScene.dispose(this.scene);
+      this.textScene = null;
     }
   }
 
